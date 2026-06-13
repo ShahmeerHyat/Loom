@@ -81,3 +81,17 @@ signal salt_reached_seam()
 
 ## Emitted when a shift produces salt. Carries the amount.
 signal salt_produced(amount: int)
+
+# --- Crusher signals (Session 8) ---
+
+## Emitted when a shift produces crush. Carries the amount.
+signal crush_produced(amount: int)
+
+## Emitted when the crusher breaks down (stays down until repaired).
+signal crusher_broke_down()
+
+## Emitted when the crusher is repaired and back in operation.
+signal crusher_repaired()
+
+## Emitted when a shift can't run for lack of raw limestone to feed it.
+signal crusher_no_input()

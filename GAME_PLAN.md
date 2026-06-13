@@ -225,5 +225,43 @@ The above is the full vision, NOT one session. It maps onto many future sessions
 ### 12.6 How this will be sliced (anti-over-scope)
 The above is the full vision, NOT one session. Session 7 builds ONLY the smallest seed: strip gypsum overburden -> reach salt seam -> produce salt, with a cutting-machine-vs-explosives choice that for now changes only output per shift (no danger/accident mechanic). Deferred: donkeys/haulage, processing plant (washing/grinding/packaging), lease, mates hiring, danger/accidents & blasting risk, transport, world placement, UI.
 
+## 13. DOMAIN DEEP-DIVE: LIMESTONE QUARRY & CRUSHER PLANT (design reference)
+> Captured from the designer's direct domain knowledge. This is the FULL vision; it is sliced across many sessions (Session 8 = primary crush, Session 9 = grizzly/screening, with later sessions for power, labor, conveyors, trucks). [UNVERIFIED] marks points the designer was unsure about.
+
+### 13.1 Two Parts of a Quarry Operation
+A limestone operation has two parts: (1) quarrying / excavation on the mountain, and (2) the crusher plant that turns big rock into saleable aggregate.
+
+### 13.2 Part 1 — Quarrying (excavation)
+- An excavator (operated by its driver) digs out big blocks of limestone on the mountain.
+- If the crusher plant is big enough to keep up, a 2nd excavator can be run to increase feed / throughput.
+
+### 13.3 Part 2 — The Crushing Chain
+- Big excavated blocks are fed into the mouth of a primary crusher — usually a JAW crusher — which breaks them into finer material.
+- A conveyor-belt system carries the output onward.
+- It is then fed into a tertiary crusher — usually an IMPACT crusher — which breaks it into even finer pieces.
+- [Note: designer described primary (jaw) -> impact; a secondary stage may exist in larger plants — confirm later.]
+
+### 13.4 Screening — Grizzly / Vibrating Screens & Aggregate Grades
+- Grizzly / vibrating screens with multiple levels (e.g. 5–6 layers) sit in the chain, at the output of the tertiary / impact crusher.
+- [UNVERIFIED: whether screens also sit at the jaw-crusher output — designer thinks NOT.]
+- The screens sift and sort the aggregate into different sizes.
+- Output sizing is driven by demand: the market wants particular mm sizes, or a specific company contract specifies required sizes.
+- Conveyor belts at the grizzly levels carry the different sized aggregates out and dump them in separate piles by size.
+- The lowest grizzly level outputs crusher dust / very fine material (also dumped via belt).
+
+### 13.5 Power & Infrastructure
+- Large generators (e.g. 400–500 KVA) are installed.
+- Electricity connections and poles must also be set up.
+
+### 13.6 Labor & Site
+- Crusher operators are required to run the plant.
+- A small shed-type building is built on site to ease logistics.
+
+### 13.7 Output & Loading
+- The finished crush (by grade) is loaded into trucks for transport / sale.
+
+### 13.8 How this will be sliced (anti-over-scope)
+Full vision above. Session 8 builds ONLY a tiny single-stage crusher: consume raw limestone -> produce crush, with a breakdown/repair mechanic. Deferred to later sessions: the excavator / 2nd excavator, the multi-stage jaw -> impact chain, conveyor belts, grizzly screening & multiple aggregate grades (Session 9), generators / power & electricity, operators / labor, the shed, contracts / market mm-size requirements, and truck loading / transport.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
