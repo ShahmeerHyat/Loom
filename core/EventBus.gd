@@ -107,3 +107,11 @@ signal grizzly_screened(crush_consumed: int)
 
 ## Emitted when a shift can't run for lack of crush to screen.
 signal grizzly_no_input()
+
+# --- Block factory signals (Session 10) ---
+
+## Emitted when a shift produces blocks. Carries how many were made.
+signal blocks_produced(amount: int)
+
+## Emitted when a shift can't make even one block for lack of materials.
+signal blocks_no_input()

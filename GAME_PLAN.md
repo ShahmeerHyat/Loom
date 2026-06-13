@@ -110,7 +110,7 @@ How the event system works: each component broadcasts events and listens for eve
 
 ## 6. WORKED EXAMPLE — Block-Making Site Setup (the depth the game is built on)
 Phase 1 — Site Prep: survey ground type; if unsuitable hire loaders/tractors to clear; compaction (multiple days, paid labor); leveling; floor laying (calculate size, buy steel/rebar, place lenter); buy cement+sand for floor pour.
-Phase 2 — Infrastructure: block machine (new=expensive/reliable vs used=cheap/repair risk); mixer machine same choice; used = find mechanic, parts, downtime; electricity connection (fee, wait); water (drill bore, buy cement rings, stack, plaster, cure); labor shelter.
+Phase 2 — Infrastructure: block machine (new=expensive/reliable vs used=cheap/repair risk); mixer machine same choice; used = find mechanic, parts, downtime; electricity connection (fee, wait); water (drill bore, buy cement rings, stack, plaster, cure); labor shelter. NOTE: these machines + the floor/curing area + crew size TOGETHER determine the block-making throughput (blocks-per-shift) — it is an emergent bottleneck, never a fixed dial.
 Phase 3 — Labor Deal: negotiate per-block rate OR daily wage; advances; work only starts after deal.
 Phase 4 — Raw Materials: crush (own quarry or buy); cement (local agent markup OR factory-direct with contacts); sand source+transport; water from bore.
 Phase 5 — Logistics: cost per trip vs load size; big loads = fewer trips = cheaper; BUT weighbridge scales check trucks; overload = fines/confiscation; find alternate routes, split loads, or deal with scale.

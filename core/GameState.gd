@@ -23,6 +23,12 @@ var salt: int = 0
 var crush: int = 0
 var blocks: int = 0
 
+# Block-making materials (sourced/bought in later sessions; consumed by the
+# block factory).
+var cement: int = 0
+var sand: int = 0
+var water: int = 0
+
 ## Graded crush, sorted by the grizzly. grade label (e.g. "20mm", "dust")
 ## -> amount. Kept as a dictionary so new grades can appear without
 ## bloating the fixed resource list above.
@@ -38,6 +44,9 @@ func _ready() -> void:
 	EventBus.resource_changed.emit("salt", salt)
 	EventBus.resource_changed.emit("crush", crush)
 	EventBus.resource_changed.emit("blocks", blocks)
+	EventBus.resource_changed.emit("cement", cement)
+	EventBus.resource_changed.emit("sand", sand)
+	EventBus.resource_changed.emit("water", water)
 
 
 # --- Company lifecycle ---
@@ -82,6 +91,9 @@ func get_resource(resource_name: String) -> int:
 		"salt": return salt
 		"crush": return crush
 		"blocks": return blocks
+		"cement": return cement
+		"sand": return sand
+		"water": return water
 		_:
 			push_warning("GameState.get_resource: unknown resource '%s'" % resource_name)
 			return 0
@@ -135,6 +147,9 @@ func _set_resource(resource_name: String, value: int) -> bool:
 		"salt": salt = value
 		"crush": crush = value
 		"blocks": blocks = value
+		"cement": cement = value
+		"sand": sand = value
+		"water": water = value
 		_:
 			push_warning("GameState._set_resource: unknown resource '%s'" % resource_name)
 			return false
