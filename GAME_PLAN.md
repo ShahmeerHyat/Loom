@@ -149,5 +149,51 @@ Only after ALL of this does the first block get made. Every other game skips thi
 - Month 6-9: Exploration, legal, town, contracts (17-22)
 - Month 10-12: Polish, sound, full release
 
+## 11. DOMAIN DEEP-DIVE: COAL MINE MECHANICS (design reference)
+> Captured from real-world domain knowledge. This is the FULL target depth for the coal mine. It will be built across MANY small sessions — never all at once. Session 5 implements only a tiny first slice (see 11.8).
+
+### 11.1 Lease & Allocation
+- Apply to the government for a mining lease.
+- Granted after a wait; the term varies by material (e.g. coal 10–30 years).
+- The lease ties you to ONE material and a specific land block / area — you may only extract what the lease is granted for.
+
+### 11.2 Opening the Mine
+- Hire a mine manager.
+- Construct the "mouth of the mine" (the entrance / portal).
+- Hire mine mates — each mate leads a team of ~10–30 workers under them.
+- Workers have donkeys that carry coal out (early/default haulage).
+
+### 11.3 Reaching the Coal (the dig)
+- Coal sits deep; depth is known beforehand from boring & exploration (e.g. ~1200 ft). You do NOT hit coal immediately.
+- Dig rate ≈ 4 ft/day per worker pair, modified by rock hardness (soft rock faster, hard rock slower).
+- Double shift (2 teams, paid more) ≈ 8 ft/day.
+- Coal pockets: small pockets are found on the way down (~700–800 ft) and give early partial income to start offsetting the heavy costs of digging.
+
+### 11.4 Timber (a major sunk cost)
+- Tunnels must be held open with timber, placed at frequent increments along the tunnel.
+- Eucalyptus: cheaper (still expensive), shorter lifespan (e.g. ~6 months) — replaced often.
+- Stronger/rarer wood: much more expensive but lasts ~10× longer (e.g. ~5 years).
+- Timber is one of the biggest money sinks when opening a mine, alongside labor.
+
+### 11.5 Tunnel Regulations
+- Legal minimum tunnel height (e.g. 6 ft), varies by province / local law.
+- A higher requirement means more dirt removed = significantly higher operating cost.
+
+### 11.6 At the Seam: Galleries & Haulage
+- The main tunnel branches into galleries (holes); each gallery is usually assigned to a different mate's team.
+- Crosses are cut between galleries for ventilation.
+- Once at the seam, you advance ALONG the coal seam — slower than the straight, narrow approach tunnel was.
+- Haulage options:
+  - Donkeys carry coal out from the seam (default, cheap, low throughput).
+  - Rail system: lay rails first (best when the tunnel is dug straight), use 1–2 tonne carriages, and a diesel haulage/engine pulls the carts out from thousands of feet deep to be dumped at the surface. High upfront cost, far better throughput.
+
+### 11.7 Ventilation & Water
+- Big industrial fans placed at mine entry/exit.
+- Ventilation crosses between galleries.
+- Pumps used in rain season for low-altitude / flood-prone mines.
+
+### 11.8 How this will be sliced (anti-over-scope)
+The above is the full vision, NOT one session. It maps onto many future sessions in tiny increments — lease (≈ Session 19), the dig (depth, rock hardness, dig rate, shifts), timber upkeep, mates & workers, donkeys vs rail haulage, galleries, ventilation, flooding/pumps — each its own later slice. Session 5 builds only the smallest playable seed of the coal mine; everything else is layered on one session at a time.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
