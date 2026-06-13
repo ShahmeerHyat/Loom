@@ -95,3 +95,15 @@ signal crusher_repaired()
 
 ## Emitted when a shift can't run for lack of raw limestone to feed it.
 signal crusher_no_input()
+
+# --- Grizzly / screening signals (Session 9) ---
+
+## Emitted when a graded-crush tally changes. grade is a size label like
+## "20mm" / "13mm" / "6mm" / "dust". Carries the new total for that grade.
+signal crush_grade_changed(grade: String, new_amount: int)
+
+## Emitted when the grizzly screens a batch. Carries the crush consumed.
+signal grizzly_screened(crush_consumed: int)
+
+## Emitted when a shift can't run for lack of crush to screen.
+signal grizzly_no_input()

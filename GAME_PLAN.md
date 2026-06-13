@@ -248,6 +248,7 @@ A limestone operation has two parts: (1) quarrying / excavation on the mountain,
 - Output sizing is driven by demand: the market wants particular mm sizes, or a specific company contract specifies required sizes.
 - Conveyor belts at the grizzly levels carry the different sized aggregates out and dump them in separate piles by size.
 - The lowest grizzly level outputs crusher dust / very fine material (also dumped via belt).
+- [Gap-fill (standard practice, inferred): the grizzly / vibrating screens are driven by an electric vibrating motor; the conveyor belts are belt-driven by electric motors; all powered by the plant generator / electricity connection.]
 
 ### 13.5 Power & Infrastructure
 - Large generators (e.g. 400–500 KVA) are installed.

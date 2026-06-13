@@ -23,6 +23,11 @@ var salt: int = 0
 var crush: int = 0
 var blocks: int = 0
 
+## Graded crush, sorted by the grizzly. grade label (e.g. "20mm", "dust")
+## -> amount. Kept as a dictionary so new grades can appear without
+## bloating the fixed resource list above.
+var crush_grades: Dictionary = {}
+
 
 func _ready() -> void:
 	# Announce initial values once everything is loaded, so any listener
@@ -103,6 +108,21 @@ func remove_resource(resource_name: String, amount: int) -> bool:
 		return false
 	EventBus.resource_changed.emit(resource_name, get_resource(resource_name))
 	return true
+
+
+# --- Crush grades (Session 9) ---
+
+## Current amount of a given crush grade (0 if that grade has none yet).
+func get_crush_grade(grade: String) -> int:
+	return int(crush_grades.get(grade, 0))
+
+
+## Add to a crush grade's tally and announce it. Use a positive amount.
+func add_crush_grade(grade: String, amount: int) -> void:
+	if amount <= 0:
+		return
+	crush_grades[grade] = get_crush_grade(grade) + amount
+	EventBus.crush_grade_changed.emit(grade, crush_grades[grade])
 
 
 # --- Internal ---
