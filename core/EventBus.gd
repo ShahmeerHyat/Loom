@@ -43,3 +43,15 @@ signal economic_event_started(event_id: String, description: String, effects: Di
 
 ## Emitted when a previously-started economic event expires.
 signal economic_event_ended(event_id: String)
+
+# --- Coal mine signals (Session 5) ---
+
+## Emitted after a shift of digging. Carries how deep the mine now reaches
+## and the depth the coal seam sits at (both in feet).
+signal mine_dig_progressed(current_depth: float, seam_depth: float)
+
+## Emitted once, the moment the dig first reaches the coal seam.
+signal mine_reached_seam()
+
+## Emitted when a shift at the seam produces coal. Carries the amount.
+signal mine_coal_produced(amount: int)
