@@ -10,6 +10,11 @@ extends Node
 ## This file should grow slowly. Only add a signal when the component that
 ## emits it is actually being built. Do not pre-declare future signals.
 
+# --- Game lifecycle signals (Session 4) ---
+
+## Emitted once when the player starts a new company from the start menu.
+signal company_started(company_name: String)
+
 # --- Resource / economy signals (Session 1) ---
 
 ## Emitted whenever the player's cash changes. Carries the new total.

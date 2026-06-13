@@ -15,6 +15,7 @@ extends Node
 const STARTING_CASH: int = 10000
 
 # --- State ---
+var company_name: String = ""
 var cash: int = STARTING_CASH
 var coal: int = 0
 var crush: int = 0
@@ -28,6 +29,15 @@ func _ready() -> void:
 	EventBus.resource_changed.emit("coal", coal)
 	EventBus.resource_changed.emit("crush", crush)
 	EventBus.resource_changed.emit("blocks", blocks)
+
+
+# --- Company lifecycle ---
+
+## Start a new company with the given name. Stores the name and announces
+## it on the EventBus. Cash already starts at STARTING_CASH.
+func start_company(name: String) -> void:
+	company_name = name
+	EventBus.company_started.emit(company_name)
 
 
 # --- Cash ---
