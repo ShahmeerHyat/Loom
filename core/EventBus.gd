@@ -18,3 +18,23 @@ signal cash_changed(new_amount: int)
 ## Emitted whenever a tracked resource quantity changes.
 ## resource_name is one of: "coal", "crush", "blocks".
 signal resource_changed(resource_name: String, new_amount: int)
+
+# --- Economy signals (Session 2) ---
+
+## Emitted when the season changes. season_name is one of:
+## "DRY", "RAIN", "WINTER", "SUMMER".
+signal season_changed(season_name: String)
+
+## Emitted when a sellable good's market price changes.
+## good is one of: "coal", "crush", "blocks".
+signal price_changed(good: String, new_price: int)
+
+## Emitted when a good's demand multiplier changes (1.0 = normal).
+signal demand_changed(good: String, multiplier: float)
+
+## Emitted when a random economic event begins (e.g. flood, tax hike).
+## effects is a Dictionary describing what the event does.
+signal economic_event_started(event_id: String, description: String, effects: Dictionary)
+
+## Emitted when a previously-started economic event expires.
+signal economic_event_ended(event_id: String)
