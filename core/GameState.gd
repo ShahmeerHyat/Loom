@@ -19,6 +19,7 @@ var company_name: String = ""
 var cash: int = STARTING_CASH
 var coal: int = 0
 var limestone: int = 0
+var salt: int = 0
 var crush: int = 0
 var blocks: int = 0
 
@@ -29,6 +30,7 @@ func _ready() -> void:
 	EventBus.cash_changed.emit(cash)
 	EventBus.resource_changed.emit("coal", coal)
 	EventBus.resource_changed.emit("limestone", limestone)
+	EventBus.resource_changed.emit("salt", salt)
 	EventBus.resource_changed.emit("crush", crush)
 	EventBus.resource_changed.emit("blocks", blocks)
 
@@ -72,6 +74,7 @@ func get_resource(resource_name: String) -> int:
 	match resource_name:
 		"coal": return coal
 		"limestone": return limestone
+		"salt": return salt
 		"crush": return crush
 		"blocks": return blocks
 		_:
@@ -109,6 +112,7 @@ func _set_resource(resource_name: String, value: int) -> bool:
 	match resource_name:
 		"coal": coal = value
 		"limestone": limestone = value
+		"salt": salt = value
 		"crush": crush = value
 		"blocks": blocks = value
 		_:

@@ -68,3 +68,16 @@ signal quarry_reached_limestone()
 
 ## Emitted when a shift produces raw limestone. Carries the amount.
 signal quarry_limestone_produced(amount: int)
+
+# --- Salt mine signals (Session 7) ---
+
+## Emitted after a shift of stripping gypsum overburden. Carries how much
+## has been cleared and the total to clear (both in feet).
+signal salt_strip_progressed(current_overburden: float, overburden_depth: float)
+
+## Emitted once, the moment the gypsum overburden is fully stripped and the
+## salt seam is exposed.
+signal salt_reached_seam()
+
+## Emitted when a shift produces salt. Carries the amount.
+signal salt_produced(amount: int)

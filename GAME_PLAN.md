@@ -195,5 +195,35 @@ Only after ALL of this does the first block get made. Every other game skips thi
 ### 11.8 How this will be sliced (anti-over-scope)
 The above is the full vision, NOT one session. It maps onto many future sessions in tiny increments — lease (≈ Session 19), the dig (depth, rock hardness, dig rate, shifts), timber upkeep, mates & workers, donkeys vs rail haulage, galleries, ventilation, flooding/pumps — each its own later slice. Session 5 builds only the smallest playable seed of the coal mine; everything else is layered on one session at a time.
 
+## 12. DOMAIN DEEP-DIVE: SALT MINE MECHANICS (design reference)
+> Based on SECONDHAND domain knowledge (a family member's experience, not the designer's own). Items flagged [UNVERIFIED] must be confirmed before they are built. Like the coal deep-dive, this is the FULL vision, sliced across many sessions — Session 7 builds only the smallest seed (see 12.6).
+
+### 12.1 Identification & Geology
+- Salt is identified by boring / survey, which reveals the salt channel/seam depth.
+- The salt seam usually sits under a gypsum overburden layer.
+
+### 12.2 Mine Form & Haulage
+- Unlike coal's deep vertical descent, salt mines are WIDE adits driven horizontally into a mountainside.
+- Because of this there are NO donkeys — haulage is carts / loaders / trucks directly.
+- [UNVERIFIED: whether the workings are fully underground.]
+
+### 12.3 Extraction Methods (risk / reward choice)
+- Cutting machines: slower output, safer.
+- Explosives / blasting: higher output, more dangerous.
+- Salt comes out as rock, then loaded and transported.
+
+### 12.4 Shared Backbone (same as coal)
+- Lease, mine manager, mates / workers, site setup, transport — the salt mine reuses the same backbone as the coal mine.
+
+### 12.5 Processing Plant (future — a much later session)
+- A build-it-yourself salt processing plant following the same philosophy (buy equipment, hire labor, set up site, transport — never autoplay).
+- Steps may include washing and powder / grinding.
+- [UNVERIFIED: the exact processing method.]
+- [UNVERIFIED: grinding possibly done with a crusher.]
+- [UNVERIFIED: a packaging step.]
+
+### 12.6 How this will be sliced (anti-over-scope)
+The above is the full vision, NOT one session. Session 7 builds ONLY the smallest seed: strip gypsum overburden -> reach salt seam -> produce salt, with a cutting-machine-vs-explosives choice that for now changes only output per shift (no danger/accident mechanic). Deferred: donkeys/haulage, processing plant (washing/grinding/packaging), lease, mates hiring, danger/accidents & blasting risk, transport, world placement, UI.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
