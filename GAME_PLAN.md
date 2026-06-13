@@ -264,5 +264,37 @@ A limestone operation has two parts: (1) quarrying / excavation on the mountain,
 ### 13.8 How this will be sliced (anti-over-scope)
 Full vision above. Session 8 builds ONLY a tiny single-stage crusher: consume raw limestone -> produce crush, with a breakdown/repair mechanic. Deferred to later sessions: the excavator / 2nd excavator, the multi-stage jaw -> impact chain, conveyor belts, grizzly screening & multiple aggregate grades (Session 9), generators / power & electricity, operators / labor, the shed, contracts / market mm-size requirements, and truck loading / transport.
 
+## 14. DOMAIN DEEP-DIVE: TRUCKS, TRANSPORT & LOGISTICS (design reference)
+> Captured from the designer's direct domain knowledge (includes real figures). Full vision; sliced across sessions (Session 11 = tiny truck seed; weighbridges / road-weather / buyers come later).
+
+### 14.1 Ownership Models
+- Whether you own trucks depends on the size of your operation.
+- Company-owned trucks: you pay only the driver's wage, fuel, and truck maintenance.
+- Hired / third-party trucks: if you haven't bought a truck (or don't plan to), a truck comes to e.g. load your blocks; you pay the loading fee + fuel + the extra charge set by the truck driver / service.
+
+### 14.2 Truck Sizes & Economies of Scale
+- Trucks come in multiple sizes; different sizes suit different jobs.
+- Bigger trucks cost much less PER UNIT of material (economies of scale).
+- Real example (during a high-fuel-price period): ~PKR 32,000 for a 20-ton load vs ~PKR 42,000 for a 40-ton load — double the material for only a little more cost, so far cheaper per ton.
+
+### 14.3 Weighbridges & Supply-Chain Optimization
+- Some routes have weighbridges; police may not let a truck carry more than the legal weight.
+- Overweight isn't allowed there, which caps throughput — so the whole supply chain must be optimized (load sizes, route choice).
+
+### 14.4 Road Conditions & Weather
+- Routes to the mine mouths / salt-mine mouths (where trucks load) are extremely bad — usually no real path, barely a dirt road (only very big companies have better).
+- In extreme rain the tyres slip and trucks can't even climb the road to reach the mines. (Ties into the rain / season system.)
+
+### 14.5 Loading & Dispatch Flow
+- Trucks load coal, salt, blocks, etc.
+- Example: coal is continually brought out; a regular 10-ton truck arrives (e.g. it hauls for a cement factory that needs coal daily, so it buys from us regularly), 10 tons is loaded, the taxes / royalty slip is generated, and the truck departs.
+- Payment is received from the truck / load owner — terms vary (sometimes advance, sometimes on delivery / later).
+
+### 14.6 Trucks as a Revenue Source
+- The player can also BUY trucks and use them to generate revenue (run loads, serve buyers).
+
+### 14.7 How this will be sliced (anti-over-scope)
+Full vision above. Session 11 builds ONLY a tiny truck seed: a truck with a capacity that hauls a material (at a per-trip cost paid in cash) and delivers it into inventory, demonstrating the per-unit economies of scale between sizes. Deferred: ownership models (owned vs hired) & their cost structures, weighbridges, road quality & rain-blocked access, royalty / tax slips, regular buyers & payment terms, trucks-as-revenue, per-site stockpiles, placement, UI.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

@@ -115,3 +115,13 @@ signal blocks_produced(amount: int)
 
 ## Emitted when a shift can't make even one block for lack of materials.
 signal blocks_no_input()
+
+# --- Truck / haulage signals (Session 11) ---
+
+## Emitted when a truck completes a trip and delivers cargo into inventory.
+## Carries the material, the amount delivered, and the cash cost of the trip.
+signal truck_delivered(material: String, amount: int, cost: int)
+
+## Emitted when a trip can't run. reason is a short explanation
+## (e.g. "nothing to haul", "not enough cash for trip cost").
+signal truck_trip_failed(reason: String)
