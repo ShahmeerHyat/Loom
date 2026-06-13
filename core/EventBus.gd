@@ -55,3 +55,16 @@ signal mine_reached_seam()
 
 ## Emitted when a shift at the seam produces coal. Carries the amount.
 signal mine_coal_produced(amount: int)
+
+# --- Limestone quarry signals (Session 6) ---
+
+## Emitted after a shift of stripping overburden. Carries how much
+## overburden has been cleared and the total to clear (both in feet).
+signal quarry_strip_progressed(current_overburden: float, overburden_depth: float)
+
+## Emitted once, the moment the overburden is fully stripped and workable
+## limestone is exposed.
+signal quarry_reached_limestone()
+
+## Emitted when a shift produces raw limestone. Carries the amount.
+signal quarry_limestone_produced(amount: int)

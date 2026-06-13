@@ -18,6 +18,7 @@ const STARTING_CASH: int = 10000
 var company_name: String = ""
 var cash: int = STARTING_CASH
 var coal: int = 0
+var limestone: int = 0
 var crush: int = 0
 var blocks: int = 0
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 	# that connects at startup can sync its display immediately.
 	EventBus.cash_changed.emit(cash)
 	EventBus.resource_changed.emit("coal", coal)
+	EventBus.resource_changed.emit("limestone", limestone)
 	EventBus.resource_changed.emit("crush", crush)
 	EventBus.resource_changed.emit("blocks", blocks)
 
@@ -69,6 +71,7 @@ func spend_cash(amount: int) -> bool:
 func get_resource(resource_name: String) -> int:
 	match resource_name:
 		"coal": return coal
+		"limestone": return limestone
 		"crush": return crush
 		"blocks": return blocks
 		_:
@@ -105,6 +108,7 @@ func remove_resource(resource_name: String, amount: int) -> bool:
 func _set_resource(resource_name: String, value: int) -> bool:
 	match resource_name:
 		"coal": coal = value
+		"limestone": limestone = value
 		"crush": crush = value
 		"blocks": blocks = value
 		_:
