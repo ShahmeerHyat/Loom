@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–17 + 19 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–17 + 19–20 DONE (verified, committed, pushed)
 ## (Session 18 "Site Survey" folded into 17's ProspectSite; numbering keeps GAME_PLAN's list)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
@@ -145,21 +145,32 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     Bridge surveyed ProspectSite → owned right to mine (wiring + one-material
     rule + mine spawn = later). Deferred §21.4: bribes/raids (S20), expiry/
     renewal, dynamic rivals, multi-bidder, real TimeManager wait, gov-office UI.
+20. Official — `components/corruption/Official.gd`: CROSS-DOMAIN bribery (free
+    `role`: weighbridge/inspector/lease clerk/quarry/blocks). `offer_bribe(amount,
+    catch_roll)` grants a favor if ≥ `required_bribe()` & paid, but rolls EXPOSURE
+    (< `catch_chance()`) → favor fails + FINE (3× bribe). `pay_retainer(amount)`
+    raises `trust` (cap 0.9) which LOWERS required_bribe & catch_chance (ongoing
+    relationship cheaper+safer than cold one-off). catch_roll injectable →
+    deterministic. Favors ABSTRACT (just reports granted) — wiring into Lease
+    wait / weighbridge overload / inspector overlooking LaborHazard safety =
+    later. Signals: bribe_succeeded/exposed/refused, retainer_paid. Deferred
+    §22.5: favor wiring, raid escalation, heat/reputation, transfers, UI.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 20 — Corruption System** (bribes to speed lease approval / dodge
-rules; risk of raids & fines; GAME_PLAN 3.5 / 21.3). Natural follow-on to
-Lease: extends `apply()`/`advance_days()` (a bribe shortens the govt wait) and
-ties to LaborHazard safety (bribe past safety surveys → catastrophe risk).
-Get domain detail from the user, PLAN FIRST, wait for OK. (Still deferred:
+**Session 21 — Town Growth** (a nearby town grows as you supply it with
+materials/blocks; town size drives demand/production targets; GAME_PLAN 3.6 /
+5#21). New consumer of your output; could tie into Market/Buyer demand. Get
+domain detail from the user, PLAN FIRST, wait for OK. (Still deferred:
 LaborCrew/LaborHazard → component throughput §16.6/17.6; Road→Truck coupling
 §15.5; rival bidding & payment timing §19.6; royalty on direct-buyer sales
-§19.6; lease expiry/renewal §21.4; wiring ProspectSite→Lease→a live mine;
-periodic ~7-day internal mine survey §11.9.)
+§19.6; lease expiry/renewal §21.4; wiring ProspectSite→Lease→live mine;
+corruption favor wiring §22.5; periodic ~7-day internal mine survey §11.9.)
+After 21: Construction Contracts (22), Seasonal/Economy events polish (23–24),
+then UI/sound/Steam (25–28).
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds

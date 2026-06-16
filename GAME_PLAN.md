@@ -490,5 +490,25 @@ Full vision above. Session 17 builds ONLY a `ProspectSite` assessment seed: a ca
 ### 21.4 How this will be sliced (anti-over-scope)
 Full vision above. Session 19 builds ONLY a standalone `Lease` acquisition seed: one leasable block with a `material`, `area_acres`, `term_years`, and a `method` (APPLICATION or AUCTION). APPLICATION: `apply()` pays the set price -> PENDING; `advance_days(n)` counts down government processing (the TimeManager seam) -> GRANTED. AUCTION: `bid(amount)` (must clear the reserve) records your bid and whether you lead the fixed `rival_top_bid`; `close_auction()` grants it (paying your bid) if you outbid the rival, else LOST. Once GRANTED it's owned for the term, tied to one material. Deferred: corruption/bribes & raids (Session 20); lease expiry/renewal; dynamic rival companies & multi-bidder auctions; a real TimeManager driving the wait; the government-office UI; and wiring a granted lease to a surveyed ProspectSite and to permitting/spawning the actual mine (enforcing the one-material rule). Numbers are placeholders.
 
+## 22. DOMAIN DEEP-DIVE: CORRUPTION & BRIBERY (design reference)
+> Designer truths below; risk/exposure mechanics are gap-fill. A CROSS-DOMAIN system — not mining-only (quarries, block sites, weighbridges, government offices all apply). "Just the cost of doing business." [Gap-fill (inferred)] tags inferred mechanics.
+
+### 22.1 Who Gets Bribed (designer)
+- Many officials can be bribed: MINE INSPECTORS (who visit regularly), GOVERNMENT / LEASE officials (to get or use leases faster), WEIGHBRIDGE operators (to wave overloaded trucks through), and others.
+- It applies across the whole business — mines, QUARRIES, BLOCK sites, etc. — not just mining.
+
+### 22.2 Two Shapes of Bribe (designer)
+- ONE-TIME: a single favor — let an overloaded truck pass, expedite a lease, etc. Pay, get the favor, done.
+- ONGOING / REGULAR: discreet recurring "ENVELOPES" / "donations" to officials who visit regularly (inspectors). It's an unspoken RELATIONSHIP — they then "look the other way." Everything goes unsaid; you go to them.
+
+### 22.3 Effects (designer)
+- Make things FASTER (e.g. speed a lease approval), let VIOLATIONS slide (overload, safety), get inspectors to OVERLOOK problems.
+
+### 22.4 Risk & Relationship (gap-fill — inferred)
+- [Gap-fill (inferred)] A bribe carries a chance of being EXPOSED -> raid / FINE (ties to 3.5). One-off bribes to a cold/stranger official are riskier and pricier; a cultivated ONGOING relationship (trust) makes future favors CHEAPER and SAFER.
+
+### 22.5 How this will be sliced (anti-over-scope)
+Full vision above. Session 20 builds ONLY a standalone, role-agnostic `Official` seed: an official (free-string `role`) with an `expected_bribe`, a `base_catch_chance`, and a `trust` relationship level. `offer_bribe(amount, catch_roll)` grants a favor if the offer clears `required_bribe()`, after paying — but rolls for EXPOSURE; if caught it pays a FINE (a multiple of the bribe) and the favor fails. `pay_retainer(amount)` builds `trust`, which LOWERS both `required_bribe()` and `catch_chance()` (a regular relationship is cheaper & safer than a cold one-off). The catch roll is injectable (default randf()) for deterministic tests. Effects are ABSTRACT here (the call just reports whether the favor was granted). Deferred: wiring favors into Lease (shorten the wait), weighbridge (pass an overload), and inspectors (overlook a failed safety survey -> keeps LaborHazard.safety from biting); raid ESCALATION beyond a fine; accumulating HEAT / reputation across many bribes; officials being transferred; and UI/flavor. Numbers are placeholders.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

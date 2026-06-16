@@ -231,3 +231,21 @@ signal lease_lost(block_name: String, reason: String)
 ## Emitted when a lease action can't run (wrong method, below reserve, not
 ## enough cash, etc.). reason is a short explanation.
 signal lease_action_failed(reason: String)
+
+# --- Corruption / bribery signals (Session 20) ---
+
+## Emitted when a bribe is accepted and the favor is granted. Carries the
+## official's name, their role, and the bribe amount paid.
+signal bribe_succeeded(official_name: String, role: String, amount: int)
+
+## Emitted when a bribe is exposed — the favor fails and a fine is paid.
+## Carries the official's name and the fine.
+signal bribe_exposed(official_name: String, fine: int)
+
+## Emitted when a bribe/retainer can't go through (offer too low, no cash).
+## Carries the official's name and a short reason.
+signal bribe_refused(official_name: String, reason: String)
+
+## Emitted when a regular retainer ("envelope") is paid, building the
+## relationship. Carries the official, the amount, and the new trust level.
+signal retainer_paid(official_name: String, amount: int, trust: float)
