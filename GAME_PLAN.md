@@ -412,5 +412,34 @@ Full vision above. Session 14 builds ONLY a standalone hazard seed: `LaborHazard
 ### 18.6 How this will be sliced (anti-over-scope)
 Full vision above. Session 15 builds ONLY a spot-sale seed: a `Market` component that sells the three goods EconomyManager already prices (coal / crush / blocks) at the LIVE market price, deducts a PER-MATERIAL government royalty, removes the resource and adds the net cash. It stays decoupled by caching prices from the EventBus `price_changed` signal (never calling EconomyManager directly). It exposes `quote()` (preview) and `sell()`, emitting `good_sold` (the chit) or `sale_failed`. Deferred: coal seam QUALITY (thickness/sulfur/GCV) & extraction feasibility; buyer TYPES (cement vs kiln), reliability, daily truck arrivals & quality requirements; the FREE sand/dust by-product (loading+transport only) & per-cubic-foot pricing; selling individual crush GRADES (the grizzly's 20mm/13mm/6mm/dust); the blocks-per-piece nuance (seed uses the per-unit price); ANNUAL CONTRACTS & competitive bidding (Session 16 / section 22); the manual discount lever; and royalty timing/accrual (seed pays on the spot). Numbers are placeholders.
 
+## 19. DOMAIN DEEP-DIVE: BUYERS & COMPETITION (design reference)
+> Captured from the designer's direct domain knowledge. The DEMAND side of selling (section 18.5), built out in Session 16. [UNVERIFIED]/[Gap-fill (inferred)] tag uncertain/inferred points.
+
+### 19.1 Buyers Have Per-Buyer Quality Requirements (designer)
+- Different buyers demand different quality of the SAME material, and reject material below their bar:
+  - Coal: brick kilns have LOW quality requirements; cement factories want HIGHER quality, especially LOW SULFUR (so their plant/materials don't corrode).
+  - Crush: normal construction mix accepts regular aggregate; a buyer like a SODA-ASH plant needs very PURE aggregate.
+- So who you can sell to depends on the quality your mine/crusher produces (quality source deferred — see 18.6).
+
+### 19.2 Who the Buyers Are (designer)
+- Many entities buy: companies, MIDDLEMEN, and AGENTS.
+- Haggling is minor — essentially fair market value, small band at most. [Gap-fill (inferred): model a small negotiation band later.]
+
+### 19.3 Deal Shapes: Contracts vs Individuals (designer)
+- LONG-TERM CONTRACTS are usually made with companies: when a contract is signed the PRICE IS LOCKED until the contract ends, for a committed quantity over its life.
+- INDIVIDUAL buyers are one-time or a few recurrent purchases at the prevailing (≈ market) price.
+
+### 19.4 Competition (designer)
+- It's capitalism — RIVALS always exist in the free market and compete for buyers/business.
+- EXCLUSIVITY: once a contract is signed, there is NO competitor for that contract's demand until it ends. The open free market (individual buyers) stays contested.
+- [Gap-fill (inferred)] Competitive BIDDING (you bid a price vs rivals to win a contract) is a later slice; the seed models a contract's exclusivity/lifecycle but not AI rivals winning/losing bids.
+
+### 19.5 Payment Terms (designer)
+- Payments come in multiple forms: ADVANCE, on-the-spot / on-delivery, etc. [UNVERIFIED: the full set and how common each is.]
+- [Gap-fill (inferred)] Advance = part/all paid up front before delivery; on-delivery = paid when goods arrive. Timing/risk modeled in a later slice (seed pays on delivery).
+
+### 19.6 How this will be sliced (anti-over-scope)
+Full vision above. Session 16 builds ONLY a standalone `Buyer` seed: one buyer with a `material`, a `min_quality` bar, an agreed `unit_price`, and a `kind` (INDIVIDUAL spot vs CONTRACT). `evaluate(quality, amount)` previews and rejects under-quality / already-fulfilled / empty offers; a CONTRACT caps the accepted amount at its committed `contract_remaining` and locks its price, an INDIVIDUAL takes the one-off offer at its price. `deliver(quality, amount)` fulfills: removes the resource from GameState and pays cash, decrementing a contract and emitting `contract_fulfilled` when done; rejects cleanly on under-quality / fulfilled / insufficient stock. Since materials don't carry quality yet, the offered QUALITY is passed in (the seam where mine seam-quality / crusher purity plug in later). Deferred: the quality SOURCE (sulfur/GCV/purity); payment-terms TIMING (advance vs on-delivery); the haggle band; rival competitive BIDDING for contracts; middlemen/agents; a marketplace of many buyers; and ROYALTY on direct-buyer sales (seed pays gross — unified with Market's per-material royalty in a later integration). Numbers are placeholders.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

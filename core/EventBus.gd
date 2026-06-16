@@ -181,3 +181,18 @@ signal good_sold(good: String, amount: int, gross: int, royalty: int, net: int)
 ## Emitted when a sale can't go through. reason is a short explanation
 ## (e.g. "not enough coal in stock", "no market price yet").
 signal sale_failed(reason: String)
+
+# --- Buyers / competition signals (Session 16) ---
+
+## Emitted when a specific buyer purchases a delivery. Carries the buyer's
+## name, the material, the amount taken, the gross paid, and the deal kind
+## ("INDIVIDUAL" or "CONTRACT").
+signal buyer_purchased(buyer_name: String, material: String, amount: int, gross: int, kind: String)
+
+## Emitted when a buyer refuses a delivery. reason is a short explanation
+## (e.g. quality too low, contract already fulfilled, not enough stock).
+signal buyer_rejected(buyer_name: String, reason: String)
+
+## Emitted when a contract's committed quantity is fully delivered (its
+## exclusivity ends). Carries the buyer's name.
+signal contract_fulfilled(buyer_name: String)

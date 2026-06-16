@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–15 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–16 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -114,19 +114,29 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     `price_changed` (never calls EconomyManager). Inherits season/event price
     swings (rain softens coal etc.) automatically. Deferred §18.6: coal seam
     quality/GCV, buyer types, free sand/dust per-cuft, crush grades, contracts.
+16. Buyer — `components/buyers/Buyer.gd`: DEMAND side. A named buyer with a
+    `material`, `min_quality` bar, agreed `unit_price`, and `kind` (INDIVIDUAL
+    spot vs CONTRACT with locked price + committed `contract_remaining`).
+    `evaluate(quality, amount)` previews; `deliver(quality, amount)` rejects
+    under-quality/fulfilled/empty/low-stock else removes resource + pays cash;
+    contracts cap at remaining, decrement, emit `contract_fulfilled`. Quality
+    is PASSED IN (mine seam-quality/crush purity = future source). Standalone;
+    pays GROSS (no royalty yet — unify w/ Market later). Signals: buyer_purchased
+    / buyer_rejected / contract_fulfilled. Deferred §19.6: quality source,
+    payment timing (advance), haggle band, rival BIDDING, agents, many-buyers.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 16 — Other Buyers / Competition** (AI buyers & rival companies;
-GAME_PLAN 3.3 / 5#16). Natural next layer on Market §18.5: buyer TYPES (cement
-vs kiln) with reliability & quality requirements, recurring/daily buyer demand,
-and competitive ANNUAL CONTRACTS / bidding vs rivals. Get domain detail from
-the user, PLAN FIRST, wait for OK. (Still deferred: LaborCrew/LaborHazard →
-component throughput §16.6/17.6; Road→Truck coupling §15.5; coal seam
-quality/GCV §18.6; free sand/dust per-cuft & crush grades §18.6.)
+**Session 17 — Map / Exploration** (discover new mine sites; survey terrain;
+sites differ in yield/quality/accessibility — GAME_PLAN 3.4 / 5#17). First
+spatial/world-data layer; could finally give sites a QUALITY value (the seam
+Market §18.6 & Buyer §19.6 are waiting on). Get domain detail from the user,
+PLAN FIRST, wait for OK. (Still deferred: LaborCrew/LaborHazard → component
+throughput §16.6/17.6; Road→Truck coupling §15.5; rival competitive bidding
+§19.6; payment-terms timing §19.6; royalty on direct-buyer sales §19.6.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds
