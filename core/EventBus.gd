@@ -171,3 +171,13 @@ signal labor_injured(injured: int, cost: int)
 ## Emitted on a rare catastrophe (e.g. a roof/rock fall when safety rules
 ## aren't followed). Carries a cause label, how many were hurt, and the cost.
 signal labor_accident(cause: String, injured: int, cost: int)
+
+# --- Selling / market signals (Session 15) ---
+
+## Emitted when a good is sold (the "chit"). Carries the good, the amount,
+## the gross value, the government royalty deducted, and the net cash gained.
+signal good_sold(good: String, amount: int, gross: int, royalty: int, net: int)
+
+## Emitted when a sale can't go through. reason is a short explanation
+## (e.g. "not enough coal in stock", "no market price yet").
+signal sale_failed(reason: String)

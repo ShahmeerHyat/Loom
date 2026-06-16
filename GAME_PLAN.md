@@ -384,5 +384,33 @@ Full vision above. Session 13 builds ONLY the smallest labor seed: a single hire
 ### 17.6 How this will be sliced (anti-over-scope)
 Full vision above. Session 14 builds ONLY a standalone hazard seed: `LaborHazard` holds a job's DANGER, SAFETY and ABSENTEE_RATE, exposes `injury_chance()` / `accident_chance()` (pure functions, so a coal mine vs a block plant is inspectable), and a `resolve_shift(team_size, ...rolls)` that rolls one shift -> {present, absent, injured, accident, cost, can_work}, charging cash for injuries/accidents. The random draws are injectable (default `randf()`) so the logic is deterministically testable. It does NOT touch LaborCrew or any component (the future mine combines `LaborCrew.work_shift()` + this). Deferred: wiring hazards into real mine/factory shifts, the annual ~3-week leave as a seasonal block, tying SAFETY to real timber/tunnel-reg state (11.4/11.5), injury recovery / worker replacement over time, pay-driven strikes/disputes (extends the `labor_unpaid` seam), injury severity tiers, and insurance. Numbers are placeholders to balance later.
 
+## 18. DOMAIN DEEP-DIVE: SELLING / MARKET (design reference)
+> Captured from the designer's direct domain knowledge. Selling differs per material. Full vision; Session 15 builds a tiny spot-sale seed. [UNVERIFIED] / [Gap-fill (inferred)] tag uncertain or inferred points.
+
+### 18.1 Coal — Quality-Driven (designer)
+- A coal mine's worth depends on the SEAM QUALITY found at the seam: thickness (a very thin ~10-inch seam may be uneconomic to extract at all) plus chemistry — low SULFUR, VOLATILE MATTER, and GCV (gross calorific value). Poor quality can make extraction infeasible.
+- Buyers differ in reliability and standards: CEMENT factories are reliable, consistent, high-volume buyers but want BETTER coal (low sulfur, good GCV); BRICK KILNS are smaller, less reliable buyers.
+- Flow: surrounding businesses send trucks (often daily); you load by truck size; a CHIT / slip is cut; government ROYALTY is paid. [UNVERIFIED: royalty paid on the spot vs at month-end — seed pays on the spot.]
+- Price nudges on external circumstances: e.g. rain closes brick kilns, so you may slightly discount to keep coal moving — but not so much you break your market. (NOTE: EconomyManager already lowers RAIN-season demand/price for coal & blocks, so selling at the live market price inherits this automatically.)
+
+### 18.2 Crush / Aggregate & Waste By-products (designer)
+- Crush is sold for money, same general rules as coal.
+- SAND and DUST are effectively WASTE the operator wants gone: they are FREE to buyers, who pay only the loading + transport cost. [So they clear stock rather than earn margin.]
+- Sand and dust are priced/measured PER CUBIC FOOT; crush per unit.
+
+### 18.3 Blocks (designer)
+- Blocks are sold PER PIECE from a stockpile: a buyer arrives and buys some quantity.
+
+### 18.4 Royalties (designer)
+- Government royalty rates DIFFER BY MATERIAL (e.g. coal vs limestone vs gypsum each have their own rate). Modeled as a per-good royalty rate (placeholders until calibrated).
+- [Gap-fill (inferred)] Real royalty is levied on the EXTRACTED mineral (coal/limestone/gypsum/salt). For now the seed applies a per-good rate at point of sale; a later slice can move it to extraction/accrual.
+
+### 18.5 Buyers vs Contracts (designer)
+- WALK-UP / spot buyers: businesses (cement, kilns, etc.) buy at the prevailing market price, load, and go.
+- ANNUAL CONTRACTS: you can sign annual supply deals with projects / big companies — sometimes won by competitive BIDDING against rivals. These are large and lucrative, and apply to future ventures/materials too. (Relates to Session 16 Other Buyers and section 22 Construction Contracts.)
+
+### 18.6 How this will be sliced (anti-over-scope)
+Full vision above. Session 15 builds ONLY a spot-sale seed: a `Market` component that sells the three goods EconomyManager already prices (coal / crush / blocks) at the LIVE market price, deducts a PER-MATERIAL government royalty, removes the resource and adds the net cash. It stays decoupled by caching prices from the EventBus `price_changed` signal (never calling EconomyManager directly). It exposes `quote()` (preview) and `sell()`, emitting `good_sold` (the chit) or `sale_failed`. Deferred: coal seam QUALITY (thickness/sulfur/GCV) & extraction feasibility; buyer TYPES (cement vs kiln), reliability, daily truck arrivals & quality requirements; the FREE sand/dust by-product (loading+transport only) & per-cubic-foot pricing; selling individual crush GRADES (the grizzly's 20mm/13mm/6mm/dust); the blocks-per-piece nuance (seed uses the per-unit price); ANNUAL CONTRACTS & competitive bidding (Session 16 / section 22); the manual discount lever; and royalty timing/accrual (seed pays on the spot). Numbers are placeholders.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

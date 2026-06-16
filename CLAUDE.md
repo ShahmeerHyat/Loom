@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–14 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–15 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -106,19 +106,27 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     → deterministically testable. Standalone (not wired into mines); future
     mine combines LaborCrew.work_shift() + this. Pay-driven strikes still use
     the LaborCrew `labor_unpaid` seam (separate later slice).
+15. Market — `components/market/Market.gd`: FIRST REVENUE component. `sell(good,
+    amount)` sells coal/crush/blocks at the LIVE market price, deducts a
+    PER-MATERIAL govt royalty (`royalty_rates` dict; coal 8% / crush 5% /
+    blocks 0%), removes resource + adds net cash, emits `good_sold` (chit) or
+    `sale_failed`. `quote()` previews. DECOUPLED: caches prices from EventBus
+    `price_changed` (never calls EconomyManager). Inherits season/event price
+    swings (rain softens coal etc.) automatically. Deferred §18.6: coal seam
+    quality/GCV, buyer types, free sand/dust per-cuft, crush grades, contracts.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 15 — Selling System** (sell crush/coal/blocks at EconomyManager
-prices; first REVENUE component — the counterpart to Truck's first cash-spend).
-Ties to GAME_PLAN 3.1/5#15. EconomyManager already publishes `price_changed` /
-`demand_changed` per good; selling removes resource via GameState + adds cash.
-Get domain detail from the user (royalty/tax slips? buyer terms?), PLAN FIRST,
-wait for OK. (Still deferred: wiring LaborCrew/LaborHazard into component
-throughput §16.6/17.6; Road→Truck coupling §15.5; other buyers/AI = Session 16.)
+**Session 16 — Other Buyers / Competition** (AI buyers & rival companies;
+GAME_PLAN 3.3 / 5#16). Natural next layer on Market §18.5: buyer TYPES (cement
+vs kiln) with reliability & quality requirements, recurring/daily buyer demand,
+and competitive ANNUAL CONTRACTS / bidding vs rivals. Get domain detail from
+the user, PLAN FIRST, wait for OK. (Still deferred: LaborCrew/LaborHazard →
+component throughput §16.6/17.6; Road→Truck coupling §15.5; coal seam
+quality/GCV §18.6; free sand/dust per-cuft & crush grades §18.6.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds
