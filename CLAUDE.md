@@ -54,7 +54,8 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–17 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–17 + 19 DONE (verified, committed, pushed)
+## (Session 18 "Site Survey" folded into 17's ProspectSite; numbering keeps GAME_PLAN's list)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -135,21 +136,29 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     discovery + LEASE (S19), surveyor-as-person, misleading estimates, thickness.
     NOTE: GAME_PLAN §11.9 added — periodic ~7-day internal mine safety survey
     (ties to LaborHazard safety; future mine-ops session).
+19. Lease — `components/lease/Lease.gd`: acquire a leasable block (material,
+    area_acres, term_years) from the govt via `method`: APPLICATION (`apply()`
+    pays price → PENDING; `advance_days(n)` counts down govt wait → GRANTED) or
+    AUCTION (`bid(amount)` ≥ reserve, leads vs fixed `rival_top_bid`;
+    `close_auction()` → win+pay → GRANTED, else LOST). Status AVAILABLE/PENDING/
+    GRANTED/LOST. Signals: lease_applied/granted/bid_placed/lost/action_failed.
+    Bridge surveyed ProspectSite → owned right to mine (wiring + one-material
+    rule + mine spawn = later). Deferred §21.4: bribes/raids (S20), expiry/
+    renewal, dynamic rivals, multi-bidder, real TimeManager wait, gov-office UI.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 18 — Site Survey → (lease prep)** is GAME_PLAN 5#18, but the
-ProspectSite seed already covers core survey. Consider going to **Session 19 —
-Lease System** (apply via govt office, wait times, sale/auction of leasable
-blocks; GAME_PLAN 3.5 / 20.2; ties a surveyed ProspectSite → an owned lease →
-a live mine) OR a "Site Survey++" slice (surveyor-as-person, misleading
-estimates). Confirm direction with the user, get domain detail, PLAN FIRST,
-wait for OK. (Still deferred: LaborCrew/LaborHazard → component throughput
-§16.6/17.6; Road→Truck coupling §15.5; rival bidding & payment timing §19.6;
-royalty on direct-buyer sales §19.6; wiring ProspectSite quality into a mine;
+**Session 20 — Corruption System** (bribes to speed lease approval / dodge
+rules; risk of raids & fines; GAME_PLAN 3.5 / 21.3). Natural follow-on to
+Lease: extends `apply()`/`advance_days()` (a bribe shortens the govt wait) and
+ties to LaborHazard safety (bribe past safety surveys → catastrophe risk).
+Get domain detail from the user, PLAN FIRST, wait for OK. (Still deferred:
+LaborCrew/LaborHazard → component throughput §16.6/17.6; Road→Truck coupling
+§15.5; rival bidding & payment timing §19.6; royalty on direct-buyer sales
+§19.6; lease expiry/renewal §21.4; wiring ProspectSite→Lease→a live mine;
 periodic ~7-day internal mine survey §11.9.)
 
 ## Known interim shortcuts (documented seams, not bugs)

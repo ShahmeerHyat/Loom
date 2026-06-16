@@ -470,5 +470,25 @@ Full vision above. Session 16 builds ONLY a standalone `Buyer` seed: one buyer w
 ### 20.6 How this will be sliced (anti-over-scope)
 Full vision above. Session 17 builds ONLY a `ProspectSite` assessment seed: a candidate block with HIDDEN true attributes (material, seam depth, quality) the player can't see until they survey. `drill_bore()` costs cash per bore, raises a CONFIDENCE that narrows the estimated depth & quality RANGES; `lab_sample()` costs cash and CONFIRMS the exact quality (requires at least one bore first). `quality_estimate()` / `depth_estimate()` return low–high ranges that tighten with confidence (unknown before any bore; quality exact after the lab). Estimates are unbiased (centered on truth, band narrows) for a clean deterministic model. THIS is where the `quality` value that Market (18.6) and Buyer (19.6) await is finally produced. Deferred: the discovery channel (gov maps / auction listings) and the LEASE / acquisition itself (section 5 #19); the surveyor as a hireable person; MISLEADING / biased estimates; seam-THICKNESS & automatic feasibility calls; world-map spatial placement; salt-prospecting specifics; and wiring a surveyed site's quality into a live mine. Numbers are placeholders.
 
+## 21. DOMAIN DEEP-DIVE: LEASE & ACQUISITION (design reference)
+> A few designer truths (the rest is gap-fill — the designer said to fill in the gaps). How a leasable block becomes yours. Builds on 11.1 and 20.2. Session 19 builds the acquisition seed. [Gap-fill (inferred)] tags inferred mechanics.
+
+### 21.1 What a Lease Is (designer + 11.1)
+- Leases differ by material and carry an AREA and a TOTAL PRICE (e.g. a salt lease has its area and price). The GOVERNMENT OFFICE holds the authority to grant them.
+- A lease is granted after a WAIT; the TERM varies by material (e.g. coal 10–30 years). It ties you to ONE material and ONE specific block — you may only extract what it's granted for (11.1).
+- Government maps (20.2) list leasable blocks available for sale / auction.
+
+### 21.2 Acquisition Paths (designer + gap-fill)
+- AUCTION: some blocks are put up for auction (designer). [Gap-fill (inferred)] You bid against rivals; the highest bid over the reserve wins and pays its bid.
+- APPLICATION: [Gap-fill (inferred)] other blocks are taken by applying at the government office and paying the set price, then waiting out government processing before it's granted.
+
+### 21.3 Deferred Detail (gap-fill / later sessions)
+- [Gap-fill (inferred)] Corruption / BRIBES to speed approval, with raid/fine risk — that's the Corruption system (section 5 #20, section 3.5).
+- [Gap-fill (inferred)] Lease EXPIRY and RENEWAL near term end.
+- [Gap-fill (inferred)] Rival COMPANIES acquiring leases dynamically (competition, 3.5); multi-round / multi-bidder auctions.
+
+### 21.4 How this will be sliced (anti-over-scope)
+Full vision above. Session 19 builds ONLY a standalone `Lease` acquisition seed: one leasable block with a `material`, `area_acres`, `term_years`, and a `method` (APPLICATION or AUCTION). APPLICATION: `apply()` pays the set price -> PENDING; `advance_days(n)` counts down government processing (the TimeManager seam) -> GRANTED. AUCTION: `bid(amount)` (must clear the reserve) records your bid and whether you lead the fixed `rival_top_bid`; `close_auction()` grants it (paying your bid) if you outbid the rival, else LOST. Once GRANTED it's owned for the term, tied to one material. Deferred: corruption/bribes & raids (Session 20); lease expiry/renewal; dynamic rival companies & multi-bidder auctions; a real TimeManager driving the wait; the government-office UI; and wiring a granted lease to a surveyed ProspectSite and to permitting/spawning the actual mine (enforcing the one-material rule). Numbers are placeholders.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

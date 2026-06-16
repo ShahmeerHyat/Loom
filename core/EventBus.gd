@@ -210,3 +210,24 @@ signal prospect_lab_result(site_name: String, quality: float)
 ## Emitted when a survey action can't run. reason is a short explanation
 ## (e.g. "drill a test bore first", "not enough cash for a test bore").
 signal prospect_survey_failed(reason: String)
+
+# --- Lease / acquisition signals (Session 19) ---
+
+## Emitted when the player applies for a lease (pays the price, awaits the
+## government's processing). Carries the block name and the price paid.
+signal lease_applied(block_name: String, price: int)
+
+## Emitted when a lease is granted (by application after the wait, or by
+## winning its auction). Carries the block, material, area and term.
+signal lease_granted(block_name: String, material: String, area_acres: float, term_years: int)
+
+## Emitted when a bid is placed at an auction. leading is true if the bid
+## currently beats the rival's top bid.
+signal lease_bid_placed(block_name: String, amount: int, leading: bool)
+
+## Emitted when a lease is lost (outbid at auction, or couldn't pay).
+signal lease_lost(block_name: String, reason: String)
+
+## Emitted when a lease action can't run (wrong method, below reserve, not
+## enough cash, etc.). reason is a short explanation.
+signal lease_action_failed(reason: String)
