@@ -356,5 +356,33 @@ The above is the FULL vision, NOT one session. Session 12 builds ONLY the smalle
 ### 16.6 How this will be sliced (anti-over-scope)
 Full vision above. Session 13 builds ONLY the smallest labor seed: a single hired CREW (a mate + a team of laborers under him) with a SKILL factor and a negotiated PAY DEAL of one of three types — PER_UNIT, DAILY, or MONTHLY. It exposes `productive_capacity()` (team_size x output_per_worker x skill) — the value a mine/factory will LATER use as its throughput driver — and a player-triggered `work_shift()` that does the work and charges wages by pay model (per-unit scales with output; daily is flat per team per day; monthly crews aren't charged per shift), plus `pay_period()` to pay monthly fixed staff. It does NOT touch any existing component (mines/crusher/factory keep their placeholder throughput for now). Deferred: village/region recruiting & skill specialization, multiple mates & gallery assignment, donkeys/haulage capability, site-specific crew roles (block-machine vs mixer operator, small crusher teams, kilns), seasonal ~3-week leave/availability, advances & hiring cost, unionization, disputes/strikes/absenteeism/injury (Session 14), and the actual wiring of crews into each component's throughput.
 
+## 17. DOMAIN DEEP-DIVE: LABOR EVENTS / HAZARDS (design reference)
+> The RISK layer on top of labor (Session 14 builds the seed). The designer supplied the core truths below; the designer explicitly does NOT know the fine detail of injuries/absenteeism, so most MECHANICS here are inferred standard-practice gap-fills, tagged [Gap-fill (inferred)] and open to revision.
+
+### 17.1 Injury Risk Depends on Work Type (designer)
+- Different work carries very different danger. Coal / underground mining is dangerous and injuries are relatively common. Block-making is comparatively safe and easy — low risk.
+- So risk is a property of the JOB, not a flat global rate.
+
+### 17.2 Rare Catastrophes from Rules Not Followed (designer)
+- Catastrophic events are RARE and tied to SAFETY discipline: e.g. if timber isn't placed at frequent enough intervals (see 11.4), a tunnel can suffer a rock/roof fall and injure workers.
+- Following the rules keeps these near-zero; cutting corners makes them spike.
+
+### 17.3 Absenteeism (designer + gap-fill)
+- Known (designer): once a year crews take a big ~3-week leave back to their villages (see 16.4) — that whole window is unavailable.
+- [Gap-fill (inferred)]: beyond the annual leave, a small random fraction of a crew no-shows on any given shift, reducing how many actually turn up.
+
+### 17.4 Modeling the Risk (gap-fill — inferred standard practice)
+- [Gap-fill (inferred)] Two per-job dials: DANGER (how hazardous the work is — coal high, blocks low) and SAFETY (how well rules / timbering are followed — player-influenced later, eventually driven by real timber/tunnel-reg state from 11.4/11.5).
+- [Gap-fill (inferred)] Per-shift injury chance scales with danger and with poor safety (~ danger x (1 - safety)). A single worker is typically hurt.
+- [Gap-fill (inferred)] Per-shift catastrophe chance scales with danger and rises SHARPLY as safety drops (e.g. squared) — capturing "rules not followed -> collapse". A catastrophe hurts several workers and stops that shift.
+- [Gap-fill (inferred)] Injuries and catastrophes cost cash (medical / compensation), catastrophes much more.
+
+### 17.5 Strikes / Disputes (designer, see 16.5)
+- Pay-driven disputes: not paying a crew makes them down tools (the `labor_unpaid` seam already emitted by LaborCrew). Unionization (16.5) escalates this but is uncommon.
+- [Gap-fill (inferred)] Strikes/disputes are a SEPARATE later slice that extends the pay seam, not part of the Session 14 hazard seed.
+
+### 17.6 How this will be sliced (anti-over-scope)
+Full vision above. Session 14 builds ONLY a standalone hazard seed: `LaborHazard` holds a job's DANGER, SAFETY and ABSENTEE_RATE, exposes `injury_chance()` / `accident_chance()` (pure functions, so a coal mine vs a block plant is inspectable), and a `resolve_shift(team_size, ...rolls)` that rolls one shift -> {present, absent, injured, accident, cost, can_work}, charging cash for injuries/accidents. The random draws are injectable (default `randf()`) so the logic is deterministically testable. It does NOT touch LaborCrew or any component (the future mine combines `LaborCrew.work_shift()` + this). Deferred: wiring hazards into real mine/factory shifts, the annual ~3-week leave as a seasonal block, tying SAFETY to real timber/tunnel-reg state (11.4/11.5), injury recovery / worker replacement over time, pay-driven strikes/disputes (extends the `labor_unpaid` seam), injury severity tiers, and insurance. Numbers are placeholders to balance later.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

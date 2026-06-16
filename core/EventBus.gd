@@ -157,3 +157,17 @@ signal labor_unpaid(reason: String)
 ## Emitted when a monthly fixed-staff crew is paid its stipend for a period.
 ## Carries the total amount paid.
 signal labor_stipend_paid(amount: int)
+
+# --- Labor events / hazards (Session 14) ---
+
+## Emitted when some of a crew don't show up for a shift. Carries how many
+## were absent and how many turned up.
+signal labor_absence(absent: int, present: int)
+
+## Emitted when a worker is injured on a shift. Carries how many were hurt
+## and the compensation / medical cost paid.
+signal labor_injured(injured: int, cost: int)
+
+## Emitted on a rare catastrophe (e.g. a roof/rock fall when safety rules
+## aren't followed). Carries a cause label, how many were hurt, and the cost.
+signal labor_accident(cause: String, injured: int, cost: int)

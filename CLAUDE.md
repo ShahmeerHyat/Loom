@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–13 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–14 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -97,17 +97,28 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     paid via `pay_period()`). No-cash → `labor_unpaid`, no work. NOT wired into
     any existing component yet — standalone, like Road. Session 14 = labor
     EVENTS (strikes/disputes/absenteeism/injury).
+14. LaborHazard — `components/labor/LaborHazard.gd`: a job's risk profile
+    (`danger`, `safety`, `absentee_rate`). `injury_chance()`/`accident_chance()`
+    are pure fns of danger × (1−safety) [accident squares (1−safety) → low
+    safety spikes catastrophe]. `resolve_shift(team_size, …rolls)` rolls one
+    shift → {present, absent, injured, accident, cost, can_work}, charging cash
+    for injuries/accidents. Random draws are INJECTABLE params (default randf())
+    → deterministically testable. Standalone (not wired into mines); future
+    mine combines LaborCrew.work_shift() + this. Pay-driven strikes still use
+    the LaborCrew `labor_unpaid` seam (separate later slice).
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 14 — Labor Events** (strikes, disputes, absenteeism, injury — the
-risk layer on top of LaborCrew). Ties to GAME_PLAN 3.2 / 16.5 and the
-`labor_unpaid` "dispute" seam already in LaborCrew. Get domain detail from the
-user, PLAN FIRST, wait for OK. (Still deferred: wiring LaborCrew into
-component throughput §16.6; Road→Truck coupling §15.5; seasonal ~3-week leave.)
+**Session 15 — Selling System** (sell crush/coal/blocks at EconomyManager
+prices; first REVENUE component — the counterpart to Truck's first cash-spend).
+Ties to GAME_PLAN 3.1/5#15. EconomyManager already publishes `price_changed` /
+`demand_changed` per good; selling removes resource via GameState + adds cash.
+Get domain detail from the user (royalty/tax slips? buyer terms?), PLAN FIRST,
+wait for OK. (Still deferred: wiring LaborCrew/LaborHazard into component
+throughput §16.6/17.6; Road→Truck coupling §15.5; other buyers/AI = Session 16.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds
