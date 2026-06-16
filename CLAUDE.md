@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–16 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–17 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -124,19 +124,33 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     pays GROSS (no royalty yet — unify w/ Market later). Signals: buyer_purchased
     / buyer_rejected / contract_fulfilled. Deferred §19.6: quality source,
     payment timing (advance), haggle band, rival BIDDING, agents, many-buyers.
+17. ProspectSite — `components/exploration/ProspectSite.gd`: assess a candidate
+    mine/quarry block with HIDDEN truth (material, true_seam_depth, true_quality).
+    `drill_bore()` (cash) raises `bore_confidence()` (capped 0.9) and NARROWS
+    `quality_estimate()`/`depth_estimate()` (low-high bands, unbiased/centered on
+    truth); `lab_sample()` (cash, needs ≥1 bore) CONFIRMS exact quality (not
+    depth). PRODUCES the quality value Market §18.6 / Buyer §19.6 await (wiring
+    into a live mine = later). Deterministic (no RNG). Signals: prospect_bored /
+    prospect_lab_result / prospect_survey_failed. Deferred §20.6: gov-maps/auction
+    discovery + LEASE (S19), surveyor-as-person, misleading estimates, thickness.
+    NOTE: GAME_PLAN §11.9 added — periodic ~7-day internal mine safety survey
+    (ties to LaborHazard safety; future mine-ops session).
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 17 — Map / Exploration** (discover new mine sites; survey terrain;
-sites differ in yield/quality/accessibility — GAME_PLAN 3.4 / 5#17). First
-spatial/world-data layer; could finally give sites a QUALITY value (the seam
-Market §18.6 & Buyer §19.6 are waiting on). Get domain detail from the user,
-PLAN FIRST, wait for OK. (Still deferred: LaborCrew/LaborHazard → component
-throughput §16.6/17.6; Road→Truck coupling §15.5; rival competitive bidding
-§19.6; payment-terms timing §19.6; royalty on direct-buyer sales §19.6.)
+**Session 18 — Site Survey → (lease prep)** is GAME_PLAN 5#18, but the
+ProspectSite seed already covers core survey. Consider going to **Session 19 —
+Lease System** (apply via govt office, wait times, sale/auction of leasable
+blocks; GAME_PLAN 3.5 / 20.2; ties a surveyed ProspectSite → an owned lease →
+a live mine) OR a "Site Survey++" slice (surveyor-as-person, misleading
+estimates). Confirm direction with the user, get domain detail, PLAN FIRST,
+wait for OK. (Still deferred: LaborCrew/LaborHazard → component throughput
+§16.6/17.6; Road→Truck coupling §15.5; rival bidding & payment timing §19.6;
+royalty on direct-buyer sales §19.6; wiring ProspectSite quality into a mine;
+periodic ~7-day internal mine survey §11.9.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds

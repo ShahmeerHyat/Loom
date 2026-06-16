@@ -196,3 +196,17 @@ signal buyer_rejected(buyer_name: String, reason: String)
 ## Emitted when a contract's committed quantity is fully delivered (its
 ## exclusivity ends). Carries the buyer's name.
 signal contract_fulfilled(buyer_name: String)
+
+# --- Exploration / site survey signals (Session 17) ---
+
+## Emitted after a test bore is drilled on a prospect. Carries the site
+## name, how many bores have now been drilled, and the resulting confidence
+## (0.0 unknown .. higher = clearer picture).
+signal prospect_bored(site_name: String, bores_done: int, confidence: float)
+
+## Emitted when a lab sample comes back, confirming the site's true quality.
+signal prospect_lab_result(site_name: String, quality: float)
+
+## Emitted when a survey action can't run. reason is a short explanation
+## (e.g. "drill a test bore first", "not enough cash for a test bore").
+signal prospect_survey_failed(reason: String)

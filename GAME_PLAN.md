@@ -192,6 +192,11 @@ Only after ALL of this does the first block get made. Every other game skips thi
 - Ventilation crosses between galleries.
 - Pumps used in rain season for low-altitude / flood-prone mines.
 
+### 11.9 Periodic Internal Safety Survey (designer — added later)
+- Roughly every ~7 days a HIRED SURVEYOR carries out an internal survey of the mine to examine its internal state: that labourers are keeping the required safety DIMENSIONS, that VENTILATION is working properly, timber/regs are in order, etc.
+- This is a recurring operating cost and a SAFETY-discipline check — it ties directly into the LaborHazard SAFETY dial (section 17): skipping or failing these surveys should let safety drift down and catastrophe risk rise.
+- [Deferred] A future mine-operations session models the periodic survey, its cost, and its effect on the safety state. Not part of the Session 5 seed or Session 17 exploration.
+
 ### 11.8 How this will be sliced (anti-over-scope)
 The above is the full vision, NOT one session. It maps onto many future sessions in tiny increments — lease (≈ Session 19), the dig (depth, rock hardness, dig rate, shifts), timber upkeep, mates & workers, donkeys vs rail haulage, galleries, ventilation, flooding/pumps — each its own later slice. Session 5 builds only the smallest playable seed of the coal mine; everything else is layered on one session at a time.
 
@@ -440,6 +445,30 @@ Full vision above. Session 15 builds ONLY a spot-sale seed: a `Market` component
 
 ### 19.6 How this will be sliced (anti-over-scope)
 Full vision above. Session 16 builds ONLY a standalone `Buyer` seed: one buyer with a `material`, a `min_quality` bar, an agreed `unit_price`, and a `kind` (INDIVIDUAL spot vs CONTRACT). `evaluate(quality, amount)` previews and rejects under-quality / already-fulfilled / empty offers; a CONTRACT caps the accepted amount at its committed `contract_remaining` and locks its price, an INDIVIDUAL takes the one-off offer at its price. `deliver(quality, amount)` fulfills: removes the resource from GameState and pays cash, decrementing a contract and emitting `contract_fulfilled` when done; rejects cleanly on under-quality / fulfilled / insufficient stock. Since materials don't carry quality yet, the offered QUALITY is passed in (the seam where mine seam-quality / crusher purity plug in later). Deferred: the quality SOURCE (sulfur/GCV/purity); payment-terms TIMING (advance vs on-delivery); the haggle band; rival competitive BIDDING for contracts; middlemen/agents; a marketplace of many buyers; and ROYALTY on direct-buyer sales (seed pays gross — unified with Market's per-material royalty in a later integration). Numbers are placeholders.
+
+## 20. DOMAIN DEEP-DIVE: EXPLORATION & SITE SURVEY (design reference)
+> Captured from the designer's direct domain knowledge. How new MINE/QUARRY sites are found and assessed before committing. Full vision; Session 17 builds the assessment seed. [Gap-fill (inferred)] tags inferred mechanics.
+
+### 20.1 Scope (designer)
+- Exploration applies to MINES & QUARRIES (coal, limestone, salt) — NOT to block-making sites or building construction (those are chosen/placed, not prospected).
+
+### 20.2 Finding a Site (designer)
+- Several routes: visit a GOVERNMENT office and obtain government MAPS showing LEASABLE BLOCKS available for sale / AUCTION; and/or HIRE SURVEYORS to find prospects.
+- (The actual lease/acquisition and auction live in the Lease system — section 5 #19.)
+
+### 20.3 Investigating a Block (designer)
+- Once you're interested in a block, you do DRILL BORE tests / test holes at different spots to learn what's underground.
+- Done by a SPECIALIST (or your own company person, but usually a specialist).
+
+### 20.4 Sampling & Lab Results (designer)
+- You take coal / limestone SAMPLES and send them to a LAB; the results reveal QUALITY.
+- A limestone quarry's worth depends on the limestone QUALITY, exactly as a coal mine depends on coal quality (sulfur/GCV etc., section 18.1).
+
+### 20.5 Progressive Confidence (gap-fill — inferred)
+- [Gap-fill (inferred)] More test bores at different spots = a clearer, tighter picture of seam depth and quality; the lab sample confirms the material's chemistry/quality. Early on the estimate is a wide range; investigation narrows it.
+
+### 20.6 How this will be sliced (anti-over-scope)
+Full vision above. Session 17 builds ONLY a `ProspectSite` assessment seed: a candidate block with HIDDEN true attributes (material, seam depth, quality) the player can't see until they survey. `drill_bore()` costs cash per bore, raises a CONFIDENCE that narrows the estimated depth & quality RANGES; `lab_sample()` costs cash and CONFIRMS the exact quality (requires at least one bore first). `quality_estimate()` / `depth_estimate()` return low–high ranges that tighten with confidence (unknown before any bore; quality exact after the lab). Estimates are unbiased (centered on truth, band narrows) for a clean deterministic model. THIS is where the `quality` value that Market (18.6) and Buyer (19.6) await is finally produced. Deferred: the discovery channel (gov maps / auction listings) and the LEASE / acquisition itself (section 5 #19); the surveyor as a hireable person; MISLEADING / biased estimates; seam-THICKNESS & automatic feasibility calls; world-map spatial placement; salt-prospecting specifics; and wiring a surveyed site's quality into a live mine. Numbers are placeholders.
 
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
