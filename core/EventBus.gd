@@ -249,3 +249,17 @@ signal bribe_refused(official_name: String, reason: String)
 ## Emitted when a regular retainer ("envelope") is paid, building the
 ## relationship. Carries the official, the amount, and the new trust level.
 signal retainer_paid(official_name: String, amount: int, trust: float)
+
+# --- Town growth signals (Session 21) ---
+
+## Emitted when the player supplies the town with goods. Carries the good,
+## the amount accepted, the cash revenue, and the growth points gained.
+signal town_supplied(good: String, amount: int, revenue: int, growth: int)
+
+## Emitted when the town's population grows past a threshold. Carries the
+## new population.
+signal town_grew(population: int)
+
+## Emitted when a supply can't go through (good not needed, not enough
+## stock). reason is a short explanation.
+signal town_supply_failed(reason: String)

@@ -197,6 +197,11 @@ Only after ALL of this does the first block get made. Every other game skips thi
 - This is a recurring operating cost and a SAFETY-discipline check — it ties directly into the LaborHazard SAFETY dial (section 17): skipping or failing these surveys should let safety drift down and catastrophe risk rise.
 - [Deferred] A future mine-operations session models the periodic survey, its cost, and its effect on the safety state. Not part of the Session 5 seed or Session 17 exploration.
 
+### 11.10 Slow Depth Creep Over Time (designer — added later)
+- Across long play, the working depth slowly increases (a few feet per day as the seam is followed/deepened). Over years/decades this raises the COST and TIME to bring coal up from the face to the surface.
+- To counter rising haulage cost the player eventually UPGRADES: more carts, better/larger haulage engines, rail improvements (ties to 11.6 haulage), etc.
+- [Deferred] A future mine-ops session models depth creep and the upgrade treadmill. Not part of the Session 5 seed.
+
 ### 11.8 How this will be sliced (anti-over-scope)
 The above is the full vision, NOT one session. It maps onto many future sessions in tiny increments — lease (≈ Session 19), the dig (depth, rock hardness, dig rate, shifts), timber upkeep, mates & workers, donkeys vs rail haulage, galleries, ventilation, flooding/pumps — each its own later slice. Session 5 builds only the smallest playable seed of the coal mine; everything else is layered on one session at a time.
 
@@ -509,6 +514,32 @@ Full vision above. Session 19 builds ONLY a standalone `Lease` acquisition seed:
 
 ### 22.5 How this will be sliced (anti-over-scope)
 Full vision above. Session 20 builds ONLY a standalone, role-agnostic `Official` seed: an official (free-string `role`) with an `expected_bribe`, a `base_catch_chance`, and a `trust` relationship level. `offer_bribe(amount, catch_roll)` grants a favor if the offer clears `required_bribe()`, after paying — but rolls for EXPOSURE; if caught it pays a FINE (a multiple of the bribe) and the favor fails. `pay_retainer(amount)` builds `trust`, which LOWERS both `required_bribe()` and `catch_chance()` (a regular relationship is cheaper & safer than a cold one-off). The catch roll is injectable (default randf()) for deterministic tests. Effects are ABSTRACT here (the call just reports whether the favor was granted). Deferred: wiring favors into Lease (shorten the wait), weighbridge (pass an overload), and inspectors (overlook a failed safety survey -> keeps LaborHazard.safety from biting); raid ESCALATION beyond a fine; accumulating HEAT / reputation across many bribes; officials being transferred; and UI/flavor. Numbers are placeholders.
+
+## 23. DOMAIN DEEP-DIVE: TOWN GROWTH (design reference)
+> Captured from the designer. You operate in a town/city/village that grows ORGANICALLY as you serve it; growth feeds the demand->sales->revenue loop. Session 21 builds the seed.
+
+### 23.1 The Growth Loop (designer)
+- You start a business in a town. As the town GROWS it needs MORE — coal for energy, stone/crush & aggregate for works, blocks for construction.
+- More demand -> more sales -> more revenue -> funds more activity, which grows the town further. Organic, self-reinforcing growth.
+- A bigger, more developed town also brings more OPPORTUNITY to find/hire BETTER labour (ties to section 16).
+
+### 23.2 How this will be sliced (anti-over-scope)
+Full vision above. Session 21 builds ONLY a `Town` seed: a town with a `population`, per-capita `needs` (coal/crush/blocks), the `prices` it pays, and per-good `growth_weight` (construction grows it more than energy). `demand_for(good)` scales with population. `supply(good, amount)` consumes up to current demand, PAYS cash (revenue), and adds GROWTH; crossing a threshold raises population (`town_grew`), which raises all demand (and each further step costs more growth). Fails cleanly on a good it doesn't need / not enough stock. Deferred: better-labour-from-growth wiring; routing town demand into Market/Buyer; per-period satiation (the seed caps each call at current demand but doesn't track a period); multiple towns / districts; the town consuming services not just goods; and any spatial/world map. Numbers are placeholders.
+
+## 24. DOMAIN DEEP-DIVE: POWER / ENERGY (design reference — FUTURE, not yet built)
+> Captured from the designer for future sessions. How sites are powered; ties to 13.5 (generators / electricity for the crusher plant).
+- GENERATORS: large gensets (e.g. 400–500 KVA, 13.5) have a capital cost plus ongoing FUEL / consumption; running cost scales with the plant's draw.
+- GRID: electricity connection + poles (13.5) — a connection fee and wait, then metered consumption.
+- SOLAR: a capital-heavy alternative — buy panel plates, inverters, and pay an install company; needs LAND AREA for the panels. Once installed it LOWERS operating cost (higher profit) where it fits the load — e.g. a crusher's daytime draw; less suited to coal operations.
+- The choice (genset vs grid vs solar) is a capex-vs-opex tradeoff per site.
+- [Deferred] Each of these is its own future session (power as an input cost to crusher/factory/etc., the solar capex build, land for panels). NOT built yet — recorded so it isn't lost.
+
+## 25. DOMAIN DEEP-DIVE: LAND & PROPERTY DEVELOPMENT (design reference — FUTURE, not yet built)
+> Captured from the designer. IMPORTANT: Loom is NOT just a mining game — property/construction ventures are a planned pillar. For future sessions.
+- LAND & PLACES: land area is available to BUY or RENT; you can also rent an existing building/place. (Distinct from mining LEASES in section 21 — this is ordinary property.)
+- CONSTRUCTION / DEVELOPMENT: after acquiring land you can CONSTRUCT buildings on it — apartments, complexes, or other building types. Choose the building SIZE and how many/what sizes, work to a BUDGET PER SQUARE FOOT, and set a SELLING PRICE per unit; sell units / make complexes for profit. This consumes your own materials (blocks/crush/cement etc.) and labour (daily-wage crews, section 16.3) — the same sourced, never-one-click philosophy.
+- This connects the whole supply chain to an end market: your blocks/aggregate feed your OWN developments and the growing town (section 23).
+- [Deferred] A multi-session venture of its own (land acquisition, the build process per phase like section 6, unit sales, financing). NOT built yet — recorded so it isn't lost.
 
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

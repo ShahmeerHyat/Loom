@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–17 + 19–20 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–17 + 19–21 DONE (verified, committed, pushed)
 ## (Session 18 "Site Survey" folded into 17's ProspectSite; numbering keeps GAME_PLAN's list)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
@@ -155,22 +155,36 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     wait / weighbridge overload / inspector overlooking LaborHazard safety =
     later. Signals: bribe_succeeded/exposed/refused, retainer_paid. Deferred
     §22.5: favor wiring, raid escalation, heat/reputation, transfers, UI.
+21. Town — `components/town/Town.gd`: organic growth loop. `population` +
+    per-capita `needs` → `demand_for(good)` scales with pop. `supply(good,
+    amount)` takes up to demand, PAYS cash (town buys), adds growth points
+    (per-good `growth_weight`); crossing `growth_threshold()` (= pop×0.1) bumps
+    population (+100) → demand rises (& next threshold higher). Fails: good not
+    needed / not enough stock. Signals: town_supplied / town_grew /
+    town_supply_failed. Deferred §23.2: better-labour-from-growth, route demand
+    into Market/Buyer, per-period satiation, multiple towns, spatial map.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 21 — Town Growth** (a nearby town grows as you supply it with
-materials/blocks; town size drives demand/production targets; GAME_PLAN 3.6 /
-5#21). New consumer of your output; could tie into Market/Buyer demand. Get
-domain detail from the user, PLAN FIRST, wait for OK. (Still deferred:
-LaborCrew/LaborHazard → component throughput §16.6/17.6; Road→Truck coupling
-§15.5; rival bidding & payment timing §19.6; royalty on direct-buyer sales
-§19.6; lease expiry/renewal §21.4; wiring ProspectSite→Lease→live mine;
-corruption favor wiring §22.5; periodic ~7-day internal mine survey §11.9.)
-After 21: Construction Contracts (22), Seasonal/Economy events polish (23–24),
-then UI/sound/Steam (25–28).
+**Session 22 — Construction Contracts** (supply X of a good by date Y for a
+reward; penalties for missing; GAME_PLAN 3.6 / 5#22). Builds on Buyer (locked
+deals) + Town; first DEADLINE mechanic (needs a day counter — TimeManager seam,
+like Lease.advance_days). Get domain detail from the user, PLAN FIRST, wait for
+OK.
+NEW future design sections now in GAME_PLAN (recorded, NOT built — pick up in
+later sessions): §24 POWER/ENERGY (gensets vs grid vs SOLAR capex/opex, land
+for panels), §25 LAND & PROPERTY DEVELOPMENT (buy/rent land+buildings, CONSTRUCT
+apartments/complexes — size, budget/sqft, unit selling price; Loom is not just
+a mining game), and §11.10 slow mine DEPTH CREEP → haulage-upgrade treadmill.
+(Still deferred: LaborCrew/LaborHazard→throughput §16.6/17.6; Road→Truck §15.5;
+rival bidding & payment timing §19.6; royalty on buyer sales §19.6; lease
+expiry/renewal §21.4; ProspectSite→Lease→live mine; corruption favor wiring
+§22.5; periodic ~7-day internal mine survey §11.9.)
+Remaining plan after 22: Seasonal/Economy event polish (23–24 of the orig list),
+UI/sound/Steam (25–28), plus the new Power & Development pillars above.
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds
