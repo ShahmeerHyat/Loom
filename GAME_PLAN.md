@@ -296,5 +296,36 @@ Full vision above. Session 8 builds ONLY a tiny single-stage crusher: consume ra
 ### 14.7 How this will be sliced (anti-over-scope)
 Full vision above. Session 11 builds ONLY a tiny truck seed: a truck with a capacity that hauls a material (at a per-trip cost paid in cash) and delivers it into inventory, demonstrating the per-unit economies of scale between sizes. Deferred: ownership models (owned vs hired) & their cost structures, weighbridges, road quality & rain-blocked access, royalty / tax slips, regular buyers & payment terms, trucks-as-revenue, per-site stockpiles, placement, UI.
 
+## 15. DOMAIN DEEP-DIVE: ROAD NETWORK (design reference)
+> Captured from the designer's domain context. Full vision; sliced across many sessions (Session 12 = a tiny road-condition seed; the road-BUILDING material chain, the map/zones, and the truck coupling come later). [UNVERIFIED] marks points the designer was unsure about.
+
+### 15.1 The Map & Zones (future — its own sessions)
+- The world is a map with distinct zones. A RESIDENTIAL zone holds the player's house and other houses and has GOOD-quality roads.
+- Mines, quarries and plants sit in DISTANT, RURAL areas — remote, with dilapidated, barely-there dirt roads (matches GAME_PLAN 14.4: routes to the mine mouths are extremely bad, often no real path).
+- Land for buildings / sites can be PURCHASED. (Land acquisition is a separate later session; noted here only as context for where roads live.)
+
+### 15.2 Roads Are a Degrading Asset (not a fixed dial)
+- A road has a QUALITY that changes over time — it is never a one-time "build" toggle.
+- HEAVY TRUCKS degrade roads through use: more traffic and heavier loads wear the surface down over time.
+- RAIN degrades roads. Normal rain is a moderate effect; severe / "bad" rain (e.g. a flood) hits much harder.
+- Quality drives TRANSPORTATION: a worse road means slower trips / longer transport times, and below a point it blocks access entirely.
+
+### 15.3 Incline & Rain-Blocked Access (the climb problem)
+- Roads leading up to the mine / salt-mine mouths are on an INCLINE and are unpaved dirt.
+- In heavy rain the tyres slip and a loaded truck simply cannot climb an inclined dirt road — so transport to/from that site naturally STOPS until conditions improve or the road is good enough.
+- A well-built / well-maintained road survives the same weather where a dilapidated dirt one becomes impassable. (Normal rain alone should not fully block; the bad case is heavy rain + incline + a poor dirt surface.)
+
+### 15.4 Building & Maintaining a Road Is a Full Sourced Process (future)
+Like everything in Loom, a road is NEVER a simple "build this" button. The full build/maintain chain (each step its own future slice):
+- Prepare the SUBBASE; source and lay base materials.
+- Source AGGREGATE / gravel — from the player's OWN crusher OR from a wholesaler — and mix to the right RATIOS. [UNVERIFIED: exact mixture ratios / gravel composition.]
+- ASPHALT / paving — sourced and laid, same sourcing-and-transport philosophy.
+- Finishing touches.
+- Materials for each stage come from DIFFERENT places, all sourced, mixed and TRANSPORTED (no free materials).
+- WHO HOLDS THE ROAD-CONSTRUCTION CONTRACT matters — quality and cost depend on the contractor. [UNVERIFIED: how road-construction contracting works in detail.]
+
+### 15.5 How this will be sliced (anti-over-scope)
+The above is the FULL vision, NOT one session. Session 12 builds ONLY the smallest road-condition seed: a single steep dirt road ("the road up to the mine mouth") with a quality that (a) starts bad, (b) degrades from truck traffic (reacting to the existing `truck_delivered` signal, scaled by load), (c) degrades from rain (moderate on the RAIN season, severe on a `flood` event) and becomes IMPASSABLE when a flood hits a steep, low-quality road, (d) can be repaired by a player-triggered action at a flat placeholder cash cost. It EXPOSES a transport-time multiplier and a passable/access value for the truck to consult later, but does NOT yet rewire `Truck.gd`. Deferred: the map & residential/rural zones, land purchase, the entire road-BUILDING material chain (subbase, aggregate sourcing from crusher vs wholesaler, mixture ratios, asphalt, finishing, transport), road-construction contractors, multiple named road segments / routes, paved vs dirt surface types, and the actual truck speed/access coupling. The flat repair cost is the explicit seam where the sourced build/maintain chain plugs in.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

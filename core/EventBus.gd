@@ -125,3 +125,20 @@ signal truck_delivered(material: String, amount: int, cost: int)
 ## Emitted when a trip can't run. reason is a short explanation
 ## (e.g. "nothing to haul", "not enough cash for trip cost").
 signal truck_trip_failed(reason: String)
+
+# --- Road network signals (Session 12) ---
+
+## Emitted whenever a road's quality changes (0.0 impassable dirt .. 1.0
+## pristine). Carries the new quality.
+signal road_quality_changed(new_quality: float)
+
+## Emitted when a road is repaired. Carries the quality gained and the
+## cash cost paid.
+signal road_repaired(quality_gained: float, cost: int)
+
+## Emitted the moment a road becomes impassable (e.g. a flood makes a steep
+## dirt road too slippery to climb). cause is a short explanation.
+signal road_became_impassable(cause: String)
+
+## Emitted the moment a previously-impassable road becomes passable again.
+signal road_became_passable()

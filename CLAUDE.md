@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–11 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–12 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -81,15 +81,24 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
 11. Truck — `components/truck/Truck.gd`: `run_trip()` hauls min(capacity,
     available) of a material, charges flat `cost_per_trip` in CASH (first
     cash-spend), delivers into GameState. Bigger trucks cheaper per unit.
+12. Road — `components/road/Road.gd`: one steep dirt road with a `quality`
+    (0..1, starts bad). Reactive only (no timer): wears from `truck_delivered`
+    (scaled by load), degrades on RAIN season (moderate) and `flood` event
+    (severe). Flood + steep + low quality → IMPASSABLE (can't climb). Exposes
+    `transport_time_multiplier()` / `is_passable()` / `access_multiplier()` for
+    the Truck to consult LATER (Truck.gd NOT yet rewired). `repair_road()` is
+    the player entry point: flat cash cost = SEAM for the sourced build chain.
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 12 — Road Network** (build roads; road quality affects truck
-speed/access). Ties to GAME_PLAN 14.4 (dirt roads, rain-blocked access). Get road
-domain detail from the user (or use 14.4 + gap-fills), PLAN FIRST, wait for OK.
+**Session 13 — Labor Market** (hire laborers; skill levels, wages, per-block
+vs daily-wage deals, seasonal availability). Ties to GAME_PLAN 3.2 and the
+"labor chain" seam (work_shift()/run_trip() entry points are where mates →
+workers plug in). Get labor domain detail from the user, PLAN FIRST, wait for
+OK. (Road coupling into Truck speed/access is still deferred — see §15.5.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds
