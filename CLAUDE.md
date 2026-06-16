@@ -54,7 +54,7 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
    committed. `.claude/settings.local.json` is gitignored.
 7. Keep the working tree clean; delete throwaway/temp files.
 
-## Build progress — Sessions 1–12 DONE (verified, committed, pushed)
+## Build progress — Sessions 1–13 DONE (verified, committed, pushed)
 1. Core architecture — `core/EventBus.gd`, `core/GameState.gd`.
 2. EconomyManager — `core/EconomyManager.gd`: seasons DRY/RAIN/WINTER/SUMMER,
    prices, demand, random events (flood/boom/recession/fuel shock/tax hike).
@@ -88,17 +88,26 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
     `transport_time_multiplier()` / `is_passable()` / `access_multiplier()` for
     the Truck to consult LATER (Truck.gd NOT yet rewired). `repair_road()` is
     the player entry point: flat cash cost = SEAM for the sourced build chain.
+13. LaborCrew — `components/labor/LaborCrew.gd`: one crew (mate + team) with a
+    `skill` factor and a negotiated `pay_type` (PER_UNIT / DAILY / MONTHLY).
+    `productive_capacity()` = team_size × output_per_worker × skill (the future
+    throughput driver for mines/factory — replaces placeholder dials like
+    blocks_per_shift). `work_shift()` does the work and charges wages by model
+    (per-unit scales with output; daily flat per team; monthly = 0 per shift,
+    paid via `pay_period()`). No-cash → `labor_unpaid`, no work. NOT wired into
+    any existing component yet — standalone, like Road. Session 14 = labor
+    EVENTS (strikes/disputes/absenteeism/injury).
 
 **Resource chain working end-to-end:** LimestoneQuarry → limestone → Crusher →
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
 ## Next session
-**Session 13 — Labor Market** (hire laborers; skill levels, wages, per-block
-vs daily-wage deals, seasonal availability). Ties to GAME_PLAN 3.2 and the
-"labor chain" seam (work_shift()/run_trip() entry points are where mates →
-workers plug in). Get labor domain detail from the user, PLAN FIRST, wait for
-OK. (Road coupling into Truck speed/access is still deferred — see §15.5.)
+**Session 14 — Labor Events** (strikes, disputes, absenteeism, injury — the
+risk layer on top of LaborCrew). Ties to GAME_PLAN 3.2 / 16.5 and the
+`labor_unpaid` "dispute" seam already in LaborCrew. Get domain detail from the
+user, PLAN FIRST, wait for OK. (Still deferred: wiring LaborCrew into
+component throughput §16.6; Road→Truck coupling §15.5; seasonal ~3-week leave.)
 
 ## Known interim shortcuts (documented seams, not bugs)
 - Mines/crusher deposit output DIRECTLY into GameState. A later session adds

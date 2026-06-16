@@ -327,5 +327,34 @@ Like everything in Loom, a road is NEVER a simple "build this" button. The full 
 ### 15.5 How this will be sliced (anti-over-scope)
 The above is the FULL vision, NOT one session. Session 12 builds ONLY the smallest road-condition seed: a single steep dirt road ("the road up to the mine mouth") with a quality that (a) starts bad, (b) degrades from truck traffic (reacting to the existing `truck_delivered` signal, scaled by load), (c) degrades from rain (moderate on the RAIN season, severe on a `flood` event) and becomes IMPASSABLE when a flood hits a steep, low-quality road, (d) can be repaired by a player-triggered action at a flat placeholder cash cost. It EXPOSES a transport-time multiplier and a passable/access value for the truck to consult later, but does NOT yet rewire `Truck.gd`. Deferred: the map & residential/rural zones, land purchase, the entire road-BUILDING material chain (subbase, aggregate sourcing from crusher vs wholesaler, mixture ratios, asphalt, finishing, transport), road-construction contractors, multiple named road segments / routes, paved vs dirt surface types, and the actual truck speed/access coupling. The flat repair cost is the explicit seam where the sourced build/maintain chain plugs in.
 
+## 16. DOMAIN DEEP-DIVE: LABOR (design reference)
+> Captured from the designer's direct domain knowledge. Full vision; sliced across many sessions (Session 13 = a tiny labor-crew + pay-deal seed; Session 14 = labor EVENTS — strikes/disputes/absenteeism/injury). This is what ultimately drives every component's throughput — the `work_shift()`/`run_trip()` entry points exist precisely so the labor chain can plug into them.
+
+### 16.1 Regional / Community Skill Specialization
+- Labor comes from different communities / villages, and different areas are KNOWN for different skills (e.g. a particular village is known for good miners). Labor quality and type therefore differ by area.
+- Recruiting is tied to where you draw workers from. [Modeled later via a per-crew skill / region; a dedicated recruiting/region session comes later.]
+
+### 16.2 Structure: Mate -> Team
+- In mining you hire a MATE, who leads his OWN team of laborers working a gallery. A second mate has a separate team in another gallery, and so on.
+- Some laborers have DONKEYS (early haulage — see 11.2/11.6), some don't.
+- Crew SIZE varies by site: crusher teams are SMALL (few people needed); mining galleries are larger.
+- Block-making needs specific ROLES, not just headcount: one laborer runs the block machine, one runs the mixer / does the mixture; brick kilns have their own distinct laborers.
+- Crew size + roles TOGETHER are what really set a site's throughput (the emergent bottleneck of section 6, e.g. the placeholder `blocks_per_shift`).
+
+### 16.3 Negotiated Pay TYPE (the core economic lever)
+- PER-UNIT: pay per block produced (block-making) or per amount dug (mining). Cost scales with output — you only pay for what's made.
+- DAILY WAGE: external labor hired for a project (e.g. a building job) is paid per day, regardless of output (flat cost / risk on a low-output day).
+- MONTHLY STIPEND (fixed staff): site cooks, managers, office staff are on a fixed monthly allowance — paid every period regardless of production (steady overhead).
+- The pay type is NEGOTIATED per crew up front; work only starts after the deal (section 6, Phase 3). Advances are sometimes given. [Advances modeled in a later slice.]
+
+### 16.4 Seasonal Availability
+- Once a year, crews take a big leave (~3 weeks) to return to their villages — labor is UNAVAILABLE during that window. Ties into the season system.
+
+### 16.5 Unionization
+- Labor can be unionized, but this is not very common in this field. [Lower-priority later slice; relates to Session 14 disputes/strikes.]
+
+### 16.6 How this will be sliced (anti-over-scope)
+Full vision above. Session 13 builds ONLY the smallest labor seed: a single hired CREW (a mate + a team of laborers under him) with a SKILL factor and a negotiated PAY DEAL of one of three types — PER_UNIT, DAILY, or MONTHLY. It exposes `productive_capacity()` (team_size x output_per_worker x skill) — the value a mine/factory will LATER use as its throughput driver — and a player-triggered `work_shift()` that does the work and charges wages by pay model (per-unit scales with output; daily is flat per team per day; monthly crews aren't charged per shift), plus `pay_period()` to pay monthly fixed staff. It does NOT touch any existing component (mines/crusher/factory keep their placeholder throughput for now). Deferred: village/region recruiting & skill specialization, multiple mates & gallery assignment, donkeys/haulage capability, site-specific crew roles (block-machine vs mixer operator, small crusher teams, kilns), seasonal ~3-week leave/availability, advances & hiring cost, unionization, disputes/strikes/absenteeism/injury (Session 14), and the actual wiring of crews into each component's throughput.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

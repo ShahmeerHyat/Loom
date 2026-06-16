@@ -142,3 +142,18 @@ signal road_became_impassable(cause: String)
 
 ## Emitted the moment a previously-impassable road becomes passable again.
 signal road_became_passable()
+
+# --- Labor signals (Session 13) ---
+
+## Emitted when a crew works a shift. Carries the work output produced, the
+## wage paid for it (0 for salaried/monthly crews), and the pay type as a
+## label ("PER_UNIT", "DAILY", "MONTHLY").
+signal labor_shift_worked(output: int, wage_paid: int, pay_type: String)
+
+## Emitted when a crew can't be paid (not enough cash) — the work doesn't
+## happen. reason is a short explanation.
+signal labor_unpaid(reason: String)
+
+## Emitted when a monthly fixed-staff crew is paid its stipend for a period.
+## Carries the total amount paid.
+signal labor_stipend_paid(amount: int)
