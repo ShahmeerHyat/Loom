@@ -27,6 +27,14 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Cash: $10,000"
 
+[node name="VSepSeason" type="VSeparator" parent="TopBar/Margin/Row"]
+layout_mode = 2
+
+[node name="SeasonLabel" type="Label" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Season: DRY"
+
 [node name="VSep" type="VSeparator" parent="TopBar/Margin/Row"]
 layout_mode = 2
 
@@ -69,3 +77,12 @@ text = "Sand: 0"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Water: 0"
+
+[node name="Banners" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = -1
+offset_left = 12.0
+offset_top = 48.0
+offset_right = 412.0
+offset_bottom = 48.0
+theme_override_constants/separation = 4

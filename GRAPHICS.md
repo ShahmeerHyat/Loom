@@ -130,8 +130,11 @@ deep-dives were captured when described).
   `world/Main.tscn`. No art, no downloads. Proved the listen-don't-drive pattern.
   - *Anti-over-scope (held):* display only; no buttons/clicking, no styling beyond
     layout, no `crush_grades` breakdown; never touches a component or GameState.
-- **G2 — HUD: season + economy banner.** React to `season_changed` and
-  `economic_event_started/ended` with a small indicator/toast.
+- **G2 — HUD: season + economy banner. ✅ DONE.** Added a `Season:` label to the
+  top bar (initial value read from `EconomyManager.get_current_season()`, then
+  updated on `season_changed`) and a `Banners` VBoxContainer that creates a banner
+  on `economic_event_started` and removes it on `economic_event_ended`, keyed by
+  event id so simultaneous events each clean up. No art. Pure observer.
 - **G3 — Ground tiles.** A `TileMap` painting terrain under the existing grid
   (first real Kenney art; establishes the asset pipeline + tile size).
 - **G4 — First machine sprite + state.** e.g. the crusher: a sprite that shows

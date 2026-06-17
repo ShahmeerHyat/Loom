@@ -193,8 +193,13 @@ visuals the check is "look at it"), then explicit-stage commit + push.
   all 8 resources; reads GameState on `_ready()`, then listens to
   `cash_changed`/`resource_changed`. Instanced into `world/Main.tscn`. Pure
   observer (no art, no downloads). Verified via F6.
-**Likely next — G2:** HUD season + economy banner (react to `season_changed` and
-`economic_event_started/ended`). Ask the user which slice to start with.
+- **G2 DONE** — extended HUD: a `Season:` label (read from
+  `EconomyManager.get_current_season()`, then `season_changed`) + a `Banners`
+  VBoxContainer that adds/removes an event banner on `economic_event_started`/
+  `economic_event_ended` (keyed by id, so simultaneous events each clean up).
+  Still pure observer, no art. Verified via F6.
+**Likely next — G3:** first REAL art — a `TileMap` ground layer under the grid
+(first Kenney pack + asset pipeline). Ask the user which slice to start with.
 
 ## FUTURE (recorded in GAME_PLAN, NOT scheduled yet)
 - Design pillars captured for later: §24 POWER/ENERGY (gensets/grid/SOLAR),
