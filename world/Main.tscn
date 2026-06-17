@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://world/CameraController.gd" id="1_camera"]
 [ext_resource type="Script" path="res://world/Grid.gd" id="2_grid"]
+[ext_resource type="PackedScene" path="res://ui/HUD.tscn" id="3_hud"]
 
 [node name="Main" type="Node2D"]
 
@@ -10,3 +11,5 @@ script = ExtResource("1_camera")
 
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("2_grid")
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]

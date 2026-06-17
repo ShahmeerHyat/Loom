@@ -577,12 +577,8 @@ Full vision above. Session 22 builds ONLY a `Contract` seed: a deal with a `clie
 ### 27.7 Note
 - This is a partial sketch, not the full list — "hundreds and hundreds" of sections remain. Treat section 27 as a living backlog: when the designer describes any of these in detail, capture it in its own deep-dive section and slice it one tiny session at a time, exactly as sessions 1–22 were done.
 
-## 28. NEXT PHASE: GRAPHICS / VISUAL LAYER (working notes)
-> Everything in sessions 1–22 is HEADLESS LOGIC verified via print — there is no rendering of the components yet. The immediate next phase (a new working session) is the visual layer: textures, sprites, assets, in-world rendering and a HUD. Guidance so it doesn't break the architecture:
-- KEEP THE ISOLATION RULE. Visuals are ADDED ALONGSIDE the logic, never by editing the headless components. A visual node/scene LISTENS to EventBus signals and READS GameState; it must not change how a component computes anything. (e.g. a HUD Label connects to `cash_changed` / `resource_changed`; a machine sprite reacts to `crusher_broke_down` / `blocks_produced`, etc.)
-- WHAT EXISTS: `world/Main.tscn` (Node2D) + `world/Grid.gd` (top-down grid) + `world/CameraController.gd` (zoom/pan); `ui/StartMenu.tscn` is the main scene. The 2D top-down style (Factorio/RimWorld) is the target (section 2).
-- ASSETS: free 2D art — Kenney.nl / itch.io / OpenGameArt (section 8). Top-down tiles, machine/building sprites, trucks, terrain. Keep a consistent tile size; put art under `res://assets/`.
-- STILL ONE THING PER SESSION, PLAN-FIRST, TEST, COMMIT. A graphics session might be "HUD showing cash + resources" or "crusher sprite with break-down state" — tiny slices. Depth remains the priority (see NOTE); graphics serve the simulation, not the other way round.
+## 28. NEXT PHASE: GRAPHICS / VISUAL LAYER
+> Everything in sessions 1–22 is HEADLESS LOGIC verified via print — no rendering yet. The next phase is the visual layer (textures, sprites, assets, in-world rendering, HUD). **This now has its own document: see `GRAPHICS.md`** — the listen-don't-drive rule, the signal→visual map, asset guidance, and the G-series session list all live there. Kept here only as a pointer so the design vision stays cross-referenced; depth still leads (see NOTE), graphics serve the simulation.
 
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.

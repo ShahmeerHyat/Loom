@@ -3,6 +3,8 @@
 **READ THIS FIRST, then read `GAME_PLAN.md` in full.** This file tells a fresh
 session exactly what Loom is, how we work, what's built, and what's next.
 `GAME_PLAN.md` holds the full design vision + domain deep-dives (sections 11–14).
+**For GRAPHICS / visual sessions also read `GRAPHICS.md`** (the visual-layer
+counterpart: the listen-don't-drive rule, signal→visual map, and G-series slices).
 
 ---
 
@@ -177,23 +179,22 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
-## Next session — NEW PHASE: GRAPHICS / VISUAL LAYER
-Sessions 1–22 are all HEADLESS LOGIC (verified via print; no rendering of
-components). The user is now starting the GRAPHICS phase. Full guidance is in
-**GAME_PLAN §28**. Key rules for graphics sessions:
-- KEEP EVENT-BUS ISOLATION: add visuals ALONGSIDE the logic; a visual scene/node
-  LISTENS to EventBus signals and READS GameState — it must NEVER edit or drive
-  the headless components. (HUD Label ← `cash_changed`/`resource_changed`;
-  machine sprite ← `crusher_broke_down`/`blocks_produced`; etc.)
-- EXISTS: `world/Main.tscn` (Node2D) + `world/Grid.gd` + `world/CameraController.gd`;
-  main scene `ui/StartMenu.tscn`. Target style: 2D top-down (Factorio/RimWorld).
-- ASSETS: free 2D art (Kenney.nl / itch.io / OpenGameArt, §8); put under
-  `res://assets/`; consistent tile size.
-- SAME DISCIPLINE: one tiny slice per session, PLAN-FIRST + wait for OK, build a
-  `test_runner`/scene to verify (or visual check via F6), then explicit-stage
-  commit + push. Depth still leads; graphics serve the sim.
-- Likely first slices: a HUD showing cash + resources (listens to existing
-  signals), then per-component sprites/states. Ask the user which to start with.
+## Next session — NEW PHASE: GRAPHICS / VISUAL LAYER (see `GRAPHICS.md`)
+Sessions 1–22 are all HEADLESS LOGIC (verified via print; no rendering). The user
+is now starting the GRAPHICS phase. **Full guidance lives in `GRAPHICS.md`** — read
+it for graphics sessions. The non-negotiable: a visual node LISTENS to EventBus
+signals and READS GameState; it NEVER mutates GameState or drives a component
+(components must run identically with the visual layer deleted). Same discipline:
+one tiny slice, PLAN-FIRST + wait for OK, verify by opening the scene (F6; for pure
+visuals the check is "look at it"), then explicit-stage commit + push.
+
+**Graphics progress (G-series — see GRAPHICS.md §5):**
+- **G1 DONE** — `ui/HUD.tscn` + `ui/HUD.gd`: a `CanvasLayer` top-bar reading cash +
+  all 8 resources; reads GameState on `_ready()`, then listens to
+  `cash_changed`/`resource_changed`. Instanced into `world/Main.tscn`. Pure
+  observer (no art, no downloads). Verified via F6.
+**Likely next — G2:** HUD season + economy banner (react to `season_changed` and
+`economic_event_started/ended`). Ask the user which slice to start with.
 
 ## FUTURE (recorded in GAME_PLAN, NOT scheduled yet)
 - Design pillars captured for later: §24 POWER/ENERGY (gensets/grid/SOLAR),
