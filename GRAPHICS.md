@@ -23,16 +23,43 @@ headless tests valid and lets us vibe-code one visual at a time safely.
 ---
 
 ## 1. VISUAL PILLARS / TARGET STYLE
-- **View:** 2D top-down (Factorio / RimWorld lineage). Depth-over-graphics — see
-  the NOTE at the end of `GAME_PLAN.md`. Clean, readable, consistent beats fancy.
+- **View: ISOMETRIC (2:1 dimetric).** Age of Empires 2 / StarCraft lineage —
+  angled camera, diamond ground tiles, buildings drawn as tall sprites with
+  visible height/facade. (DECISION: pivoted from top-down before any world art
+  was built — see §1a for why and what it costs.) Depth-over-graphics still
+  rules — see the NOTE at the end of `GAME_PLAN.md`.
 - **Setting:** fictional developing country — mountains, quarries, dirt roads,
   a small growing town (matches GAME_PLAN §2).
-- **Tile size:** **64×64 px** (DEFAULT — change here if we pick otherwise once we
-  see real art). One number, used everywhere, so tiles/sprites line up.
+- **Tile size:** **128×64 px diamond** (2:1 — the standard dimetric ratio; that
+  ratio *is* the angled-camera look). One size used everywhere so tiles + sprite
+  footprints line up. Change here if we adopt a different art family's size.
 - **Palette:** earthy/industrial (rock greys, dust tan, coal black, rust). Not
   locked yet; refine when we have art in hand.
 - **Asset licence:** prefer **CC0 / public domain** so there are no attribution
-  or licensing headaches at Steam launch. Kenney.nl is CC0 — our default source.
+  or licensing headaches at Steam launch. Kenney.nl is CC0 — but see §4: iso CC0
+  art is scarcer than top-down, and CONSISTENCY (one art family) matters more.
+
+## 1a. WHY ISOMETRIC + WHAT IT COSTS (so a future session doesn't second-guess it)
+- The pivot was made when the ONLY visuals built were the screen-space HUD (G1/G2,
+  perspective-agnostic) and a placeholder square `Grid.gd` — so there was nothing
+  to migrate. Cheapest possible moment to choose.
+- COST (accepted knowingly): iso buys zero simulation depth and is a heavier art
+  burden than top-down — CC0 iso terrain/building art is rarer, every world sprite
+  must exist at the iso angle + tile scale, and style consistency is unforgiving.
+- The AoE2/SC look is traditionally achieved by **3D-modelling then pre-rendering
+  to 2D sprites** at a fixed camera angle (not hand-drawn iso). If we ever need
+  bespoke buildings, that Blender→sprite pipeline is the route. Recorded, not yet
+  chosen.
+
+## 1b. ISOMETRIC RENDERING FACTS (Godot specifics)
+- A `TileMapLayer` with `tile_shape = Isometric` still stores cells as `(x, y)`
+  INTEGER coords (same as a square map); Godot only RENDERS them as diamonds and
+  converts via `map_to_local()` / `local_to_map()`. We rarely hand-roll iso math.
+- **Height illusion = tall sprites + Y-SORT, not the tilemap.** Ground diamonds are
+  flat. A building/machine is a tall sprite whose **art origin sits at its ground
+  contact point**, drawn on a **Y-sorted** layer (`y_sort_enabled`) so lower-on-
+  screen draws in front. THIS IS A NON-NEGOTIABLE for every world sprite (alongside
+  §0's listen-don't-drive): consistent footprint, ground-contact origin, Y-sort on.
 
 ## 2. RENDERING ARCHITECTURE
 - **Where visuals live:** scenes/scripts under `res://world/` (in-world: terrain,
@@ -102,12 +129,17 @@ You've never done graphics — here's the plain-English version.
   Zero downloads. We'll do that first precisely so you learn the listen-don't-
   drive pattern before touching art.
 
-**When we DO start drawing the world**, here's the one-stop plan:
-- Go to **https://kenney.nl/assets** → it's all **CC0** (free, no attribution,
-  safe for Steam). Good packs for us: search **"Tiny Town"**, **"RTS"**,
-  **"Top-down"**, **"Roads / Tracks"**, **"UI Pack"**. Download the ZIP(s).
-- Backups if Kenney lacks something: **itch.io** (filter Free + check the licence
-  says CC0/CC-BY) and **OpenGameArt.org** (check licence per asset).
+**When we DO start drawing the world** (ISOMETRIC — see §1), the plan:
+- Go to **https://kenney.nl/assets** → all **CC0** (free, no attribution, safe for
+  Steam). For iso, search **"Isometric"** — e.g. isometric tile/landscape and
+  building packs. NOTE: Kenney's iso catalogue is smaller than his top-down one.
+- Backups: **itch.io** (filter Free + verify CC0/CC-BY) and **OpenGameArt.org**
+  (check licence per asset; search "isometric").
+- **CONSISTENCY > quantity (iso-specific risk).** Mixing iso art from different
+  artists (different camera angle / tile size / light direction) looks broken in a
+  way top-down tolerates. Commit to ONE art family and one tile size (§1). If no
+  single CC0 family covers everything, the fallback is the Blender→pre-rendered
+  sprite pipeline (§1a) — flag it and we decide deliberately.
 - Unzip and drop the PNGs into `res://assets/...`. Tell me what's in there (or
   the pack name) and I'll wire the exact files. Keep everything at our tile size.
 - I'll always tell you the **exact pack/files** to grab for a given session so you
@@ -135,8 +167,10 @@ deep-dives were captured when described).
   updated on `season_changed`) and a `Banners` VBoxContainer that creates a banner
   on `economic_event_started` and removes it on `economic_event_ended`, keyed by
   event id so simultaneous events each clean up. No art. Pure observer.
-- **G3 — Ground tiles.** A `TileMap` painting terrain under the existing grid
-  (first real Kenney art; establishes the asset pipeline + tile size).
+- **G3 — Isometric ground (`TileMapLayer`, `tile_shape = Isometric`).** First real
+  art: a diamond-tiled ground, replacing the placeholder grid. Establishes the iso
+  asset pipeline + tile size (§1) and the Y-sort convention (§1b). Requires picking
+  ONE iso art family first (§4). Also rebuilds `Grid.gd` as an iso reference grid.
 - **G4 — First machine sprite + state.** e.g. the crusher: a sprite that shows
   running / broken / idle off `crush_produced` / `crusher_broke_down` /
   `crusher_repaired`. Static art + modulate/animation by code.

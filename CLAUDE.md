@@ -198,8 +198,15 @@ visuals the check is "look at it"), then explicit-stage commit + push.
   VBoxContainer that adds/removes an event banner on `economic_event_started`/
   `economic_event_ended` (keyed by id, so simultaneous events each clean up).
   Still pure observer, no art. Verified via F6.
-**Likely next — G3:** first REAL art — a `TileMap` ground layer under the grid
-(first Kenney pack + asset pipeline). Ask the user which slice to start with.
+**PERSPECTIVE DECISION:** Loom pivoted from top-down to **ISOMETRIC (2:1 dimetric,
+AoE2/StarCraft style)** before any world art was built (only HUD G1/G2 + a
+placeholder square grid existed, so nothing to migrate). Rationale + iso rendering
+facts + the Y-sort non-negotiable are in GRAPHICS.md §1/§1a/§1b. Core/components/
+HUD are all perspective-agnostic and unchanged.
+**Likely next — G3 (ISO):** first REAL art — an isometric ground `TileMapLayer`
+(`tile_shape = Isometric`, 128×64 diamonds) replacing the placeholder grid;
+rebuild `Grid.gd` as an iso reference grid. GATED on picking ONE CC0 iso art
+family first (GRAPHICS.md §4). Ask the user which slice to start with.
 
 ## FUTURE (recorded in GAME_PLAN, NOT scheduled yet)
 - Design pillars captured for later: §24 POWER/ENERGY (gensets/grid/SOLAR),
