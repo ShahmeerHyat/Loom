@@ -263,3 +263,21 @@ signal town_grew(population: int)
 ## Emitted when a supply can't go through (good not needed, not enough
 ## stock). reason is a short explanation.
 signal town_supply_failed(reason: String)
+
+# --- Construction contract signals (Session 22) ---
+
+## Emitted when goods are delivered toward a contract. Carries the client,
+## the amount just delivered, the running total, and the quantity required.
+signal contract_delivered(client_name: String, amount: int, delivered: int, required: int)
+
+## Emitted when a contract is completed (fully delivered before the deadline).
+## Carries the client and the reward paid.
+signal contract_completed(client_name: String, reward: int)
+
+## Emitted when a contract fails (deadline passed before completion). Carries
+## the client and the penalty charged.
+signal contract_failed(client_name: String, penalty: int)
+
+## Emitted when a contract action can't run (already settled, not enough
+## stock). reason is a short explanation.
+signal contract_action_failed(reason: String)

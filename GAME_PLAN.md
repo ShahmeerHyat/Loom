@@ -541,5 +541,48 @@ Full vision above. Session 21 builds ONLY a `Town` seed: a town with a `populati
 - This connects the whole supply chain to an end market: your blocks/aggregate feed your OWN developments and the growing town (section 23).
 - [Deferred] A multi-session venture of its own (land acquisition, the build process per phase like section 6, unit sales, financing). NOT built yet — recorded so it isn't lost.
 
+## 26. DOMAIN DEEP-DIVE: CONSTRUCTION CONTRACTS (design reference)
+> Designer truths are light here (gap-filled). Deadline-bound supply deals to projects / big clients (sections 3.6, 18.5). Session 22 builds the seed.
+
+### 26.1 The Shape
+- A client/project commits you to supply a QUANTITY of a material BY A DEADLINE, for a REWARD. Bigger than a one-off spot sale; you fulfil it over time in multiple deliveries.
+- Miss the deadline and there's a PENALTY (and lost reward). These deals are large and lucrative when met (ties to the annual contracts in 18.5/19.3).
+
+### 26.2 How this will be sliced (anti-over-scope)
+Full vision above. Session 22 builds ONLY a `Contract` seed: a deal with a `client_name`, `material`, `quantity_required`, `days_allowed`, `reward`, and `penalty`. `deliver(amount)` takes goods from inventory toward the quota; completing it before the deadline pays the reward (FULFILLED). `advance_days(n)` counts the deadline down (the TimeManager seam); running out before completion FAILS the contract and charges the penalty. Clean fails on a settled contract / not enough stock. Deferred: up-front ADVANCE & milestone payments; quality requirements on delivered goods (19.1); competitive BIDDING to win the contract (19.4); reputation effects; partial-credit on failure (seed: delivered goods are lost, no reward, plus penalty); a real TimeManager. Numbers are placeholders.
+
+## 27. FAR-FUTURE SCOPE / MEGA-ROADMAP (design reference — NOT scheduled yet)
+> IMPORTANT for any future session: Loom is only just beginning. Sessions 1–22 are the SEED of a vastly larger game — hundreds upon hundreds of sessions are planned. The designer wants this recorded now so the scope is never lost, but does NOT want these turned into scheduled sessions yet. Every item below follows the SAME "bring it up from the dust" philosophy as section 6 (survey/compaction, source & procure materials, transport, mix, build, source mine/plant equipment, set up, hire professionals — never a one-click "build") and is astronomically larger for the heavy-industry items.
+
+### 27.1 Heavy Industry (each a MEGA-segment = many sessions)
+- Complete CEMENT factory (huge — its own large segment).
+- STEEL factory / mills (huge).
+- OIL REFINERY (huge), fed by OIL FIELDS / extraction.
+
+### 27.2 Power & Water (mega-segments)
+- DAMS; THERMAL power stations; NUCLEAR power plants (fed by uranium, below). Connects to the Power/Energy pillar (section 24).
+
+### 27.3 More Mines & Extraction
+- URANIUM, COPPER, GOLD, DIAMOND, GYPSUM mines; OIL FIELDS. Each reuses the mining backbone (lease/survey/labor/haulage) with its own geology, processing and market.
+
+### 27.4 Civic & Construction Projects (built bottom-up, section 6 philosophy)
+- HOSPITALS, SCHOOLS, UNIVERSITIES, RESEARCH CENTRES — not "click to build a school": full procurement, compaction, materials, transport, mixing, construction, equipment, hiring professionals. Connects to the Land & Property Development pillar (section 25).
+
+### 27.5 Defense
+- WEAPONS factories, AMMO factories, manufacturing weapons — same sourced/build-up philosophy, with their own supply chains.
+
+### 27.6 Meta / Soft Systems
+- POLITICS involvement; CHARITY and PUBLIC POPULARITY/reputation; and much more.
+
+### 27.7 Note
+- This is a partial sketch, not the full list — "hundreds and hundreds" of sections remain. Treat section 27 as a living backlog: when the designer describes any of these in detail, capture it in its own deep-dive section and slice it one tiny session at a time, exactly as sessions 1–22 were done.
+
+## 28. NEXT PHASE: GRAPHICS / VISUAL LAYER (working notes)
+> Everything in sessions 1–22 is HEADLESS LOGIC verified via print — there is no rendering of the components yet. The immediate next phase (a new working session) is the visual layer: textures, sprites, assets, in-world rendering and a HUD. Guidance so it doesn't break the architecture:
+- KEEP THE ISOLATION RULE. Visuals are ADDED ALONGSIDE the logic, never by editing the headless components. A visual node/scene LISTENS to EventBus signals and READS GameState; it must not change how a component computes anything. (e.g. a HUD Label connects to `cash_changed` / `resource_changed`; a machine sprite reacts to `crusher_broke_down` / `blocks_produced`, etc.)
+- WHAT EXISTS: `world/Main.tscn` (Node2D) + `world/Grid.gd` (top-down grid) + `world/CameraController.gd` (zoom/pan); `ui/StartMenu.tscn` is the main scene. The 2D top-down style (Factorio/RimWorld) is the target (section 2).
+- ASSETS: free 2D art — Kenney.nl / itch.io / OpenGameArt (section 8). Top-down tiles, machine/building sprites, trucks, terrain. Keep a consistent tile size; put art under `res://assets/`.
+- STILL ONE THING PER SESSION, PLAN-FIRST, TEST, COMMIT. A graphics session might be "HUD showing cash + resources" or "crusher sprite with break-down state" — tiny slices. Depth remains the priority (see NOTE); graphics serve the simulation, not the other way round.
+
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
