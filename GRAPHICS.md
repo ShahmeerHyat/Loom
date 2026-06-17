@@ -167,10 +167,20 @@ deep-dives were captured when described).
   updated on `season_changed`) and a `Banners` VBoxContainer that creates a banner
   on `economic_event_started` and removes it on `economic_event_ended`, keyed by
   event id so simultaneous events each clean up. No art. Pure observer.
-- **G3 — Isometric ground (`TileMapLayer`, `tile_shape = Isometric`).** First real
-  art: a diamond-tiled ground, replacing the placeholder grid. Establishes the iso
-  asset pipeline + tile size (§1) and the Y-sort convention (§1b). Requires picking
-  ONE iso art family first (§4). Also rebuilds `Grid.gd` as an iso reference grid.
+- **G3 — Isometric ground (`TileMapLayer`, `tile_shape = Isometric`). ✅ DONE.**
+  `world/GroundTiles.gd` (a `TileMapLayer`) builds an iso TileSet IN CODE from
+  `assets/tiles/ground/dirt_128x64.png` (row 0 = 8 full-diamond variants,
+  128×64) and paints a 51×51 block with random variants. `Grid.gd` rebuilt as an
+  iso reference grid using the matching DIAMOND_DOWN math (`(x-y)*w/2, (x+y)*h/2`)
+  so lines sit exactly on the tiles; `snap_to_grid()` now returns iso cell centres.
+  Instanced as `Ground` (first child, drawn under the grid) in `world/Main.tscn`.
+  Pure rendering. ASSET LIBRARY: 8 iso ground types (dirt/dirt_dark/forest/
+  grass_dry/grass_green/grass_medium/sand/stone_path) at 128×64 + 64×32 are in
+  `assets/tiles/ground/` for future biomes/zones; only dirt is wired so far.
+  - *Pipeline learned (reuse for every world sprite):* drop CC0 PNG in
+    `assets/`, build/define the resource in code or a `.tres`, render via a node
+    that reads nothing from the sim. The Y-sort convention (§1b) kicks in at G4
+    (first tall sprite), not needed for flat ground.
 - **G4 — First machine sprite + state.** e.g. the crusher: a sprite that shows
   running / broken / idle off `crush_produced` / `crusher_broke_down` /
   `crusher_repaired`. Static art + modulate/animation by code.

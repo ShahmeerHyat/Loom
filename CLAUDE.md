@@ -203,10 +203,16 @@ AoE2/StarCraft style)** before any world art was built (only HUD G1/G2 + a
 placeholder square grid existed, so nothing to migrate). Rationale + iso rendering
 facts + the Y-sort non-negotiable are in GRAPHICS.md §1/§1a/§1b. Core/components/
 HUD are all perspective-agnostic and unchanged.
-**Likely next — G3 (ISO):** first REAL art — an isometric ground `TileMapLayer`
-(`tile_shape = Isometric`, 128×64 diamonds) replacing the placeholder grid;
-rebuild `Grid.gd` as an iso reference grid. GATED on picking ONE CC0 iso art
-family first (GRAPHICS.md §4). Ask the user which slice to start with.
+- **G3 DONE (ISO)** — first REAL art. `world/GroundTiles.gd` (`TileMapLayer`)
+  builds an iso TileSet IN CODE from `assets/tiles/ground/dirt_128x64.png` (8
+  full-diamond variants, 128×64) and paints a 51×51 block; `Grid.gd` rebuilt as a
+  matching iso reference grid (DIAMOND_DOWN math; `snap_to_grid` → iso cell
+  centres); `Ground` instanced under the grid in `world/Main.tscn`. CC0 ground
+  pack (8 types ×2 sizes) lives in `assets/tiles/ground/`; only dirt wired. Pure
+  rendering. Verified via F6 (tiles + grid align perfectly).
+**Likely next — G4:** first WORLD SPRITE with the Y-sort/ground-origin convention
+(GRAPHICS.md §1b) — e.g. a building/machine sprite reacting to its signal. Ask the
+user which slice to start with.
 
 ## FUTURE (recorded in GAME_PLAN, NOT scheduled yet)
 - Design pillars captured for later: §24 POWER/ENERGY (gensets/grid/SOLAR),

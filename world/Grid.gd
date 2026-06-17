@@ -1,42 +1,51 @@
 extends Node2D
 
-## Grid — draws a top-down reference grid for the game world.
+## Grid — isometric reference grid (rebuilt for the iso pivot, slice G3).
 ##
-## Pure presentation: no game logic, talks to no other component. It just
-## renders a grid centred on the origin so the world has a visible sense
-## of scale and placement. cell_size is exported so future placement
-## components can read it / snap to it via snap_to_grid().
+## Pure presentation: no game logic, talks to no other component. Draws a faint
+## diamond lattice using the SAME iso math as the ground TileMapLayer (centre of
+## cell (x,y) = ((x-y)*w/2, (x+y)*h/2)), so the lines sit exactly on the tiles
+## and give a visible sense of cell scale. snap_to_grid() maps a world point to
+## its iso cell centre, for future placement components.
 
-@export var cell_size: int = 64
-@export var cells_x: int = 50
-@export var cells_y: int = 50
-@export var background_color: Color = Color(0.12, 0.12, 0.14)
-@export var line_color: Color = Color(1, 1, 1, 0.08)
-@export var axis_color: Color = Color(1, 1, 1, 0.18)
+@export var tile_size: Vector2i = Vector2i(128, 64)
+@export var radius: int = 25
+@export var line_color: Color = Color(1, 1, 1, 0.06)
+@export var axis_color: Color = Color(1, 1, 1, 0.14)
 
 
 func _draw() -> void:
-	var half_w: int = cells_x * cell_size / 2
-	var half_h: int = cells_y * cell_size / 2
-
-	# Ground fill behind the lines so the grid reads against any clear colour.
-	draw_rect(
-		Rect2(-half_w, -half_h, cells_x * cell_size, cells_y * cell_size),
-		background_color,
-		true
-	)
-
-	# Vertical lines (the centre line uses the brighter axis colour).
-	for i in range(-cells_x / 2, cells_x / 2 + 1):
-		var x: int = i * cell_size
-		draw_line(Vector2(x, -half_h), Vector2(x, half_h), axis_color if i == 0 else line_color, 1.0)
-
-	# Horizontal lines.
-	for j in range(-cells_y / 2, cells_y / 2 + 1):
-		var y: int = j * cell_size
-		draw_line(Vector2(-half_w, y), Vector2(half_w, y), axis_color if j == 0 else line_color, 1.0)
+	# Outline each cell as a diamond. Shared edges overlap (drawn twice); at this
+	# low alpha that's an acceptable, barely-visible seam for a reference grid.
+	for x in range(-radius, radius + 1):
+		for y in range(-radius, radius + 1):
+			var color: Color = axis_color if (x == 0 or y == 0) else line_color
+			_draw_diamond(_cell_center(x, y), color)
 
 
-## Snap a world-space position to the bottom-left corner of its grid cell.
+## World-space centre of iso cell (x, y) — matches DIAMOND_DOWN tile placement.
+func _cell_center(x: int, y: int) -> Vector2:
+	return Vector2((x - y) * tile_size.x / 2.0, (x + y) * tile_size.y / 2.0)
+
+
+func _draw_diamond(center: Vector2, color: Color) -> void:
+	var hw: float = tile_size.x / 2.0
+	var hh: float = tile_size.y / 2.0
+	var top: Vector2 = center + Vector2(0, -hh)
+	var right: Vector2 = center + Vector2(hw, 0)
+	var bottom: Vector2 = center + Vector2(0, hh)
+	var left: Vector2 = center + Vector2(-hw, 0)
+	draw_line(top, right, color, 1.0)
+	draw_line(right, bottom, color, 1.0)
+	draw_line(bottom, left, color, 1.0)
+	draw_line(left, top, color, 1.0)
+
+
+## Snap a world-space position to the centre of the iso cell it falls in.
+## (Inverse of _cell_center.)
 func snap_to_grid(world_pos: Vector2) -> Vector2:
-	return (world_pos / float(cell_size)).floor() * float(cell_size)
+	var hw: float = tile_size.x / 2.0
+	var hh: float = tile_size.y / 2.0
+	var cx: int = roundi((world_pos.x / hw + world_pos.y / hh) / 2.0)
+	var cy: int = roundi((world_pos.y / hh - world_pos.x / hw) / 2.0)
+	return _cell_center(cx, cy)
