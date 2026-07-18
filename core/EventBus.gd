@@ -281,3 +281,232 @@ signal contract_failed(client_name: String, penalty: int)
 ## Emitted when a contract action can't run (already settled, not enough
 ## stock). reason is a short explanation.
 signal contract_action_failed(reason: String)
+
+# --- Time signals (Mega-build: TimeManager) ---
+
+## Emitted once per game-day by TimeManager — the single heartbeat every
+## day-based system listens to. Carries the day number (1-based, ever up).
+signal day_passed(day: int)
+
+# --- Terrain signals (Mega-build: TerrainData) ---
+
+## Emitted once when the world terrain model is ready to be queried.
+signal terrain_generated(width: int, height: int)
+
+# --- Farm land signals (Mega-build: FARMING) ---
+
+## Emitted when an agricultural parcel is bought. Carries the parcel name,
+## its size, and the cash paid.
+signal farm_land_purchased(parcel_name: String, acres: float, cost: int)
+
+## Emitted when irrigation (a tubewell) is installed on an owned parcel.
+signal farm_irrigation_installed(parcel_name: String, cost: int)
+
+## Emitted when a farm-land action can't run (already owned, no cash, etc.).
+signal farm_action_failed(reason: String)
+
+# --- Crop signals (Mega-build: FARMING) ---
+
+## Emitted when a crop is sown. season_ok is false when it was sown out of
+## its proper season (germination suffers).
+signal crop_sown(crop_type: String, acres: float, season_ok: bool)
+
+## Emitted each day a crop grows. Carries progress toward maturity.
+signal crop_progressed(crop_type: String, days_grown: int, growth_days: int)
+
+## Emitted on a day the crop couldn't drink (not enough water) — stress
+## builds toward yield loss and, eventually, a dead crop.
+signal crop_stressed(crop_type: String, stress_days: int)
+
+## Emitted when fertilizer is applied. Carries the running application
+## count and the resulting yield multiplier (over-application burns).
+signal crop_fertilized(crop_type: String, applications: int, yield_multiplier: float)
+
+## Emitted the day a crop reaches maturity (ready to harvest — don't wait
+## too long or it rots in the field).
+signal crop_matured(crop_type: String)
+
+## Emitted when a mature crop is harvested. Carries the units banked.
+signal crop_harvested(crop_type: String, amount: int)
+
+## Emitted when a crop dies (drought stress) or rots (left unharvested).
+signal crop_failed(crop_type: String, reason: String)
+
+## Emitted when a crop action can't run (wrong state, no seeds, etc.).
+signal crop_action_failed(reason: String)
+
+# --- Farm equipment signals (Mega-build: FARMING) ---
+
+## Emitted when a machine (tractor / harvester / thresher) is bought.
+signal equipment_purchased(equipment_name: String, kind: String, cost: int)
+
+## Emitted when a machine works a task, burning fuel.
+signal equipment_worked(equipment_name: String, fuel_used: int)
+
+## Emitted when a machine breaks down (stays down until repaired).
+signal equipment_broke_down(equipment_name: String)
+
+## Emitted when a broken machine is repaired. Carries the cash cost.
+signal equipment_repaired(equipment_name: String, cost: int)
+
+## Emitted when an equipment action can't run (not owned, no fuel, etc.).
+signal equipment_action_failed(reason: String)
+
+# --- Iron mine signals (Mega-build: STEEL CHAIN) ---
+
+## Emitted after a shift of digging toward the iron seam.
+signal iron_dig_progressed(current_depth: float, seam_depth: float)
+
+## Emitted once, the moment the dig first reaches the iron seam.
+signal iron_reached_seam()
+
+## Emitted when a shift at the seam produces iron ore. Carries the amount.
+signal iron_ore_produced(amount: int)
+
+# --- Steel factory signals (Mega-build: STEEL CHAIN) ---
+
+## Emitted when the blast furnace is fired up (a big coal charge). Carries
+## how many shifts of heat the firing bought.
+signal furnace_fired(heat_shifts: int)
+
+## Emitted when a hot-furnace shift produces steel. Carries the amount.
+signal steel_produced(amount: int)
+
+## Emitted when the furnace runs out of heat and goes cold (fire it again).
+signal furnace_cooled()
+
+## Emitted when the furnace lining wears out — no more shifts until relined.
+signal furnace_lining_worn()
+
+## Emitted when a worn furnace is relined. Carries the cash cost.
+signal furnace_relined(cost: int)
+
+## Emitted when a steel-factory action can't run (cold furnace, no ore,
+## no coal, no power, lining worn). reason is a short explanation.
+signal steel_action_failed(reason: String)
+
+# --- Cement factory signals (Mega-build: STEEL CHAIN) ---
+
+## Emitted when a kiln shift produces cement. Carries the amount.
+signal cement_produced(amount: int)
+
+## Emitted when a cement shift can't run (no limestone / coal / power).
+signal cement_action_failed(reason: String)
+
+# --- Weapons factory signals (Mega-build: MILITARY) ---
+
+## Emitted when the government arms licence is acquired. Carries the fee.
+signal weapons_license_acquired(cost: int)
+
+## Emitted when a shift produces rifles. Carries the amount.
+signal weapons_produced(amount: int)
+
+## Emitted when a shift produces ammunition. Carries the rounds made.
+signal ammo_produced(amount: int)
+
+## Emitted when a weapons action can't run (no licence, no steel, etc.).
+signal weapons_action_failed(reason: String)
+
+# --- Army procurement signals (Mega-build: MILITARY) ---
+
+## Emitted when a bid is lodged on an army tender. REVERSE auction: the
+## LOWEST price wins, so leading means our price undercuts the rival's.
+signal tender_bid_placed(tender_name: String, price_per_unit: int, leading: bool)
+
+## Emitted when the tender closes in our favour. Carries the locked price.
+signal tender_won(tender_name: String, price_per_unit: int)
+
+## Emitted when the tender is lost. reason is a short explanation.
+signal tender_lost(tender_name: String, reason: String)
+
+## Emitted when goods are delivered against a won tender. The army pays on
+## receipt at the locked per-unit price.
+signal army_delivered(tender_name: String, amount: int, paid: int, delivered: int, required: int)
+
+## Emitted when a won tender is fully supplied on time. Carries the bonus.
+signal army_contract_completed(tender_name: String, bonus: int)
+
+## Emitted when the deadline passes before full supply. Carries the penalty.
+signal army_contract_failed(tender_name: String, penalty: int)
+
+## Emitted when a procurement action can't run. reason is short.
+signal army_action_failed(reason: String)
+
+# --- Power signals (Mega-build: POWER) ---
+
+## Emitted when power is generated. source is "genset" or "solar".
+signal power_generated(source: String, amount: int)
+
+## Emitted when the genset can't run for lack of fuel.
+signal genset_no_fuel()
+
+## Emitted when the genset breaks down (stays down until repaired).
+signal genset_broke_down()
+
+## Emitted when the genset is repaired. Carries the cash cost.
+signal genset_repaired(cost: int)
+
+## Emitted when a solar array is bought and installed. Carries the capex.
+signal solar_installed(cost: int)
+
+## Emitted when a power action can't run (not installed, no cash, etc.).
+signal power_action_failed(reason: String)
+
+# --- Property signals (Mega-build: PROPERTY) ---
+
+## Emitted when a construction shift advances a building.
+signal construction_progressed(building_name: String, points: int, points_required: int)
+
+## Emitted once when a building's construction completes (rent can flow).
+signal building_completed(building_name: String)
+
+## Emitted each day a completed building accrues rent (uncollected).
+signal rent_accrued(building_name: String, amount: int)
+
+## Emitted when accrued rent is collected into cash.
+signal rent_collected(building_name: String, amount: int)
+
+## Emitted when a property action can't run (no materials, nothing accrued).
+signal property_action_failed(reason: String)
+
+# --- Bank signals (Mega-build: BANKING) ---
+
+## Emitted when a loan is disbursed. Carries the cash received and the
+## opening principal.
+signal loan_taken(amount: int, principal: int)
+
+## Emitted each day interest compounds onto an active loan.
+signal loan_interest_accrued(interest: int, principal: int)
+
+## Emitted when a repayment is made. principal is what remains (0 = clear).
+signal loan_repaid(amount: int, principal: int)
+
+## Emitted when a ballooned loan defaults — the bank seizes what it can and
+## blacklists the company. Carries the cash seized.
+signal loan_defaulted(seized: int)
+
+## Emitted when a bank action can't run (existing loan, over limit, etc.).
+signal bank_action_failed(reason: String)
+
+# --- Fuel depot signals (Mega-build: FUEL) ---
+
+## Emitted when fuel is bought. Carries the litres and the cash paid.
+signal fuel_purchased(litres: int, cost: int)
+
+## Emitted when the pump price moves (e.g. a fuel_shock event doubles it).
+signal fuel_price_changed(price_per_litre: int)
+
+## Emitted when a fuel purchase can't go through. reason is short.
+signal fuel_purchase_failed(reason: String)
+
+# --- Warehouse signals (Mega-build: STORAGE) ---
+
+## Emitted when material is moved into site storage. used/capacity report
+## how full the warehouse now is.
+signal warehouse_stored(material: String, amount: int, used: int, capacity: int)
+
+## Emitted when material is withdrawn from site storage back to inventory.
+signal warehouse_withdrawn(material: String, amount: int)
+
+## Emitted when a warehouse action can't run (full, nothing stored, etc.).
+signal warehouse_action_failed(reason: String)

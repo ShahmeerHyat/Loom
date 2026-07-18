@@ -40,11 +40,21 @@ enum Status { AVAILABLE, PENDING, GRANTED, LOST }
 @export var reserve_price: int = 40000  # minimum acceptable bid
 @export var rival_top_bid: int = 0      # the best competing bid to beat
 
+## Mega-build: TimeManager now exists — when on, the government wait counts
+## down on the global day_passed heartbeat (tests turn it off and drive
+## advance_days() by hand).
+@export var listen_to_clock: bool = true
+
 # --- State ---
 var status: Status = Status.AVAILABLE
 var approval_days_left: int = 0
 var current_bid: int = 0     # your standing auction bid
 var paid: int = 0            # what you ended up paying
+
+
+func _ready() -> void:
+	if listen_to_clock:
+		EventBus.day_passed.connect(_on_day_passed)
 
 
 # --- Application path ---
@@ -135,6 +145,10 @@ func status_name() -> String:
 
 
 # --- Internal ---
+
+func _on_day_passed(_day: int) -> void:
+	advance_days(1)
+
 
 func _grant() -> void:
 	status = Status.GRANTED

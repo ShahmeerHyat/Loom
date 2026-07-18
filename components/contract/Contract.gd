@@ -29,6 +29,11 @@ enum Status { ACTIVE, FULFILLED, FAILED }
 ## Charged if the deadline passes before completion.
 @export var penalty: int = 10000
 
+## Mega-build: TimeManager now exists — when on, the deadline counts down
+## on the global day_passed heartbeat (tests turn it off and drive
+## advance_days() by hand).
+@export var listen_to_clock: bool = true
+
 # --- State ---
 var delivered: int = 0
 var days_left: int = 0
@@ -37,6 +42,12 @@ var status: Status = Status.ACTIVE
 
 func _ready() -> void:
 	days_left = days_allowed
+	if listen_to_clock:
+		EventBus.day_passed.connect(_on_day_passed)
+
+
+func _on_day_passed(_day: int) -> void:
+	advance_days(1)
 
 
 # --- Delivery ---

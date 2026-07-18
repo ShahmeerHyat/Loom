@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EventBus="*res://core/EventBus.gd"
 GameState="*res://core/GameState.gd"
+TimeManager="*res://core/TimeManager.gd"
 EconomyManager="*res://core/EconomyManager.gd"
 
 [physics]

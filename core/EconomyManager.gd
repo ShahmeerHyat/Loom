@@ -8,22 +8,33 @@ extends Node
 ## emitting EventBus signals. It does not buy, sell, or reference any
 ## other component. Selling lives in a later session.
 ##
-## TIME SEAM: TimeManager does not exist yet, so for now this component
-## drives itself with an internal Timer (one tick = one game-day). When
-## TimeManager is built, delete the Timer and instead connect
-## _advance_day() to a `day_passed` EventBus signal. That is the only
-## change needed here.
+## TIME SEAM (RESOLVED in the Mega-build): TimeManager now owns the clock.
+## The old internal Timer is gone — _advance_day() connects to the
+## EventBus `day_passed` heartbeat, exactly as this seam always promised.
 
 # --- Tuning (safe to tweak) ---
-const DAY_LENGTH_SECONDS: float = 2.0   # real seconds per game-day
 const DAYS_PER_SEASON: int = 30
-const GOODS: Array[String] = ["coal", "crush", "blocks"]
+const GOODS: Array[String] = [
+	"coal", "crush", "blocks",
+	# Mega-build: the market now prices salt, processed goods and crops.
+	# (weapons/ammo are deliberately NOT market goods — the army tender is
+	# the only legal buyer; see ArmyProcurement.)
+	"salt", "cement", "steel",
+	"wheat", "rice", "cotton", "sugarcane",
+]
 
 # Base/"fair weather" price per unit, before season/demand/drift.
 const BASE_PRICES: Dictionary = {
 	"coal": 50,
 	"crush": 30,
 	"blocks": 12,
+	"salt": 15,
+	"cement": 18,
+	"steel": 120,
+	"wheat": 20,
+	"rice": 25,
+	"cotton": 35,
+	"sugarcane": 8,
 }
 
 const SEASONS: Array[String] = ["DRY", "RAIN", "WINTER", "SUMMER"]
@@ -31,11 +42,12 @@ const SEASONS: Array[String] = ["DRY", "RAIN", "WINTER", "SUMMER"]
 # Per-season demand multiplier for each good (1.0 = normal).
 # RAIN closes brick kilns and slows coal; WINTER drives coal (heating);
 # DRY is prime building season.
+# Goods not listed for a season fall back to 1.0 (see _recompute_economy).
 const SEASON_DEMAND: Dictionary = {
-	"DRY":    {"coal": 1.0, "crush": 1.1, "blocks": 1.2},
-	"RAIN":   {"coal": 0.7, "crush": 0.8, "blocks": 0.5},
-	"WINTER": {"coal": 1.4, "crush": 0.9, "blocks": 0.8},
-	"SUMMER": {"coal": 0.9, "crush": 1.1, "blocks": 1.1},
+	"DRY":    {"coal": 1.0, "crush": 1.1, "blocks": 1.2, "cement": 1.2, "steel": 1.1, "sugarcane": 1.1},
+	"RAIN":   {"coal": 0.7, "crush": 0.8, "blocks": 0.5, "cement": 0.6, "steel": 0.8, "wheat": 1.1, "rice": 0.9},
+	"WINTER": {"coal": 1.4, "crush": 0.9, "blocks": 0.8, "wheat": 1.3, "cotton": 1.2, "salt": 1.1},
+	"SUMMER": {"coal": 0.9, "crush": 1.1, "blocks": 1.1, "rice": 1.2, "cotton": 0.9, "salt": 1.2},
 }
 
 # Random events. daily_chance is rolled each game-day per event that is
@@ -77,6 +89,28 @@ const EVENT_TEMPLATES: Array[Dictionary] = [
 		"min_days": 30, "max_days": 60,
 		"demand_mods": {"blocks": 0.85, "crush": 0.85, "coal": 0.9},
 	},
+	# --- Mega-build events ---
+	{
+		"id": "drought",
+		"description": "Drought — failed harvests send crop prices soaring.",
+		"daily_chance": 0.012,
+		"min_days": 15, "max_days": 35,
+		"demand_mods": {"wheat": 1.6, "rice": 1.8, "sugarcane": 1.4, "cotton": 1.3},
+	},
+	{
+		"id": "harvest_glut",
+		"description": "Bumper harvest across the region — crop prices collapse.",
+		"daily_chance": 0.015,
+		"min_days": 10, "max_days": 30,
+		"demand_mods": {"wheat": 0.6, "rice": 0.6, "cotton": 0.7, "sugarcane": 0.7},
+	},
+	{
+		"id": "border_tension",
+		"description": "Border tension — military buildup drives steel and construction.",
+		"daily_chance": 0.008,
+		"min_days": 20, "max_days": 45,
+		"demand_mods": {"steel": 1.4, "cement": 1.2, "coal": 1.1},
+	},
 ]
 
 # --- State ---
@@ -90,9 +124,6 @@ var _active_events: Array[Dictionary] = []
 var _current_demand: Dictionary = {}   # good -> float
 var _current_price: Dictionary = {}    # good -> int
 
-var _tick_timer: Timer
-
-
 func _ready() -> void:
 	randomize()
 
@@ -101,12 +132,8 @@ func _ready() -> void:
 	EventBus.season_changed.emit(get_current_season())
 	_recompute_economy()
 
-	# Internal day clock (see TIME SEAM note at top of file).
-	_tick_timer = Timer.new()
-	_tick_timer.wait_time = DAY_LENGTH_SECONDS
-	_tick_timer.autostart = true
-	_tick_timer.timeout.connect(_advance_day)
-	add_child(_tick_timer)
+	# The clock now lives in TimeManager (the resolved TIME SEAM).
+	EventBus.day_passed.connect(_advance_day)
 
 
 # --- Public read API (query without waiting for a signal) ---
@@ -125,7 +152,7 @@ func get_demand(good: String) -> float:
 
 # --- Day / season progression ---
 
-func _advance_day() -> void:
+func _advance_day(_world_day: int) -> void:
 	_day += 1
 
 	if _day % DAYS_PER_SEASON == 0:
