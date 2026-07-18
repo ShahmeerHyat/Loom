@@ -179,6 +179,42 @@ https://github.com/ShahmeerHyat/Loom (branch `main`).
 crush → Grizzly → graded crush; and crush+cement+sand+water → BlockFactory →
 blocks. CoalMine/SaltMine feed coal/salt. Truck moves material at a cash cost.
 
+## MEGA-BUILD (July 2026) — one big multi-domain session (user-requested
+## departure from one-component-per-session; the per-slice rule RESUMES after).
+## 16 new components + 2 core systems, committed in 6 batches. All headless
+## logic, same EventBus/GameState isolation, all day-based logic unified on
+## the new TimeManager heartbeat. New GameState resources: wheat, rice,
+## cotton, sugarcane, seeds, fertilizer, iron_ore, steel, weapons, ammo,
+## fuel, power.
+- **TimeManager** (`core/TimeManager.gd`, autoload #3) — THE resolved TIME
+  SEAM: one tick (2s) = 1 day → `day_passed`. `stop_clock()`/`advance_days()`.
+  EconomyManager's internal Timer DELETED — it listens to day_passed now.
+  Lease/Contract retrofitted with `listen_to_clock` (deadlines ride the clock).
+- **TerrainData** (`world/TerrainData.gd`) — deterministic seeded elevation/
+  terrain model (FastNoiseLite): PLAINS/HILLS/MOUNTAIN/RIVER, elevation ft,
+  fertility, slope grades, transport multipliers. Pure query provider —
+  wiring into FarmLand/Road + iso elevation art = later slices.
+- **Economy expanded** — market now prices salt/cement/steel/wheat/rice/
+  cotton/sugarcane (weapons/ammo deliberately NOT priced — army-only);
+  new events: drought, harvest_glut, border_tension.
+- **FARMING** (`components/farm/`) — FarmLand (buy acres, irrigate),
+  Crop (sow→daily growth→stress/death→mature→harvest/rot; wheat/rice/
+  cotton/sugarcane; season windows, water thirst, fertilizer boost/burn;
+  zero RNG), FarmEquipment (tractor/harvester/thresher, fuel, breakdown).
+- **STEEL CHAIN** — IronMine (dig→ore), SteelFactory (fire_up coal charge →
+  hot shifts eat ore+coal+POWER → steel; heat runs out; lining wears →
+  reline), CementFactory (limestone+coal+power → cement; closes the loop).
+- **MILITARY** (`components/military/`) — WeaponsFactory (arms LICENCE gate;
+  steel→rifles, steel+coal→ammo), ArmyProcurement (REVERSE auction — lowest
+  bid wins; locked price, pay-on-receipt, bonus, deadline penalty).
+- **POWER** (`components/power/`) — Genset (fuel→power, breakdown),
+  SolarArray (capex then free daily power × season sun: SUMMER 1.3/RAIN 0.4).
+- **PROPERTY/BANK/FUEL/STORAGE** — ApartmentBuilding (blocks+cement+steel+
+  labor → COMPLETE → daily rent accrual, occupancy climbs on collection),
+  Bank (one loan, daily compound interest, default+blacklist past 2× limit),
+  FuelDepot (pump price ×2 during fuel_shock), Warehouse (capacity-capped
+  site stockpile — first step on the interim-path seam).
+
 ## Next session — NEW PHASE: GRAPHICS / VISUAL LAYER (see `GRAPHICS.md`)
 Sessions 1–22 are all HEADLESS LOGIC (verified via print; no rendering). The user
 is now starting the GRAPHICS phase. **Full guidance lives in `GRAPHICS.md`** — read

@@ -582,3 +582,40 @@ Full vision above. Session 22 builds ONLY a `Contract` seed: a deal with a `clie
 
 ## NOTE
 A 2D systems game's strength is DEPTH, not graphics. Factorio and RimWorld look simple and made millions. Pour everything into the simulation depth. The realistic construction knowledge is the unfair advantage — nobody else can build this.
+
+## 29. MEGA-BUILD LOG (July 2026) — the big multi-domain session
+> A one-time, user-requested departure from one-component-per-session: 16
+> components + 2 core systems landed in six batch commits, all headless logic
+> under the same EventBus/GameState isolation. The per-slice rule RESUMES
+> after this. Full component summary lives in CLAUDE.md ("MEGA-BUILD"); this
+> section records the design decisions so future deep-dives build on them.
+
+### 29.1 What landed
+- **TimeManager** — the TIME SEAM resolved: one `day_passed` heartbeat, all
+  day-based logic (economy, crops, interest, rent, deadlines) unified on it.
+- **TerrainData** — deterministic elevation/terrain/fertility model (the old
+  flat world acknowledged as a placeholder). Plains/hills/mountain/river,
+  slope grades, transport multipliers. QUERY-ONLY; wiring later.
+- **FARMING**: FarmLand, Crop (wheat/rice/cotton/sugarcane; season windows,
+  water/stress/drought-death, fertilizer boost-then-burn, rot), FarmEquipment.
+- **STEEL CHAIN**: IronMine, SteelFactory (blast-furnace firing/heat/lining
+  states; first POWER consumer), CementFactory (cement loop closed).
+- **MILITARY** (seed of §27.5): licensed WeaponsFactory; ArmyProcurement
+  reverse tender (lowest bid wins; army is the ONLY weapons buyer — weapons/
+  ammo deliberately have no market price).
+- **POWER** (seed of §24): Genset (fuel→power), SolarArray (season-scaled).
+- **PROPERTY** (seed of §25): ApartmentBuilding — first passive income.
+- **BANK / FUEL / WAREHOUSE**: daily-compounding credit with default+
+  blacklist; pump price riding fuel_shock; capacity-capped site stockpile
+  (first concrete step on the interim-path seam).
+
+### 29.2 New deferred seams opened by the mega-build
+- TerrainData → FarmLand.soil_fertility / Road slopes / mine placement /
+  iso elevation art.
+- Crop ← FarmLand ownership gate + FarmEquipment work_multiplier (harvester
+  cuts a field in a day vs hand labor).
+- Power as a LIVE grid/load model instead of banked units; load shedding.
+- Army reputation/blacklisting; weapons quality bars (Buyer 19.1 pattern).
+- Bank collateral (leases/buildings), credit-history rebuild after default.
+- Warehouse: producer rerouting (mines → stockpile → truck), spoilage, theft.
+- Corruption favor: Official waiving the arms-licence fee/wait (§22.5).
